@@ -1,16 +1,18 @@
-FILE=skeleton
+# Name of source file
+FILE=main
 
 ########
 #   Directories
 S_DIR=Source
 B_DIR=Build
+GLMDIR=glm
 
 ########
 #   Output
 EXEC=$(B_DIR)/$(FILE)
 
-# default build settings
-CC_OPTS=-c -pipe -Wall -Wno-switch -ggdb -g3 
+# default build settings # Can add -O3 to add optimisations
+CC_OPTS=-c -pipe -Wall -Wno-switch -ggdb -g3
 LN_OPTS=
 CC=g++
 
@@ -22,7 +24,8 @@ SDL_LDFLAGS := $(shell sdl-config --libs)
 
 ########
 #   This is the default action
-all:Build
+all: clean / Build
+	./Build/$(FILE)
 
 
 ########
@@ -38,10 +41,10 @@ $(B_DIR)/$(FILE).o : $(S_DIR)/$(FILE).cpp $(S_DIR)/SDLauxiliary.h $(S_DIR)/TestM
 
 
 ########
-#   Main build rule     
-Build : $(OBJ) Makefile
+#   Main build rule
+Build: $(OBJ) Makefile
 	$(CC) $(LN_OPTS) -o $(EXEC) $(OBJ) $(SDL_LDFLAGS)
 
 
 clean:
-	rm -f $(B_DIR)/* 
+	rm -f $(B_DIR)/*
