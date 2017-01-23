@@ -119,16 +119,15 @@ void Draw()
 	}
 
 	// TODO: future, add #includes and parralise loops like e.g.
-	// #pragma omp parallel for with Open MP 
+	// #pragma omp parallel for with Open MP
+
 	for( int y=0; y<SCREEN_HEIGHT; ++y )
 	{
 		Interpolate_v(leftSide[y], rightSide[y], colours);
 
-		for( int x=0; x<SCREEN_WIDTH; ++x )
+		for(int x = 0; x<SCREEN_WIDTH; ++x )
 		{
-			Interpolate_v(leftSide[x], rightSide[x], colours);
-
-			PutPixelSDL( screen, x, y, colours[y] );
+			PutPixelSDL( screen, x, y, colours[x] );
 		}
 	}
 
