@@ -13,6 +13,9 @@ make
 A rendered image of the [Cornell Box](https://en.wikipedia.org/wiki/Cornell_box) should appear.
 Note: SDL should be installed on the machine.
 
+## Latest Rendered Image
+
+![Screenshot](screenshot.bmp "Rendered Image")
 
 ## Overview
 
