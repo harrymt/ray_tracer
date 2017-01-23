@@ -4,7 +4,7 @@ Ray Tracer for the University of Bristol Computer Graphics course (course work 1
 
 ## How to Build
 
-Simply use the [MakeFile](MakeFile) by running the following command in the directory.
+Simply use the [Makefile](Makefile) by running the following command in the directory.
 
 ```
 make
