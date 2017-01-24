@@ -2,10 +2,13 @@
 #include <glm/glm.hpp>
 #include <SDL.h>
 #include <stdexcept>
+#include <cstdlib>
+#include <ctime>
 #include "SDLauxiliary.h"
 #include "TestModel.h"
 
 using namespace std;
+using glm::vec2;
 using glm::vec3;
 using glm::mat3;
 
@@ -27,6 +30,10 @@ vector<vec3> rightSide( SCREEN_HEIGHT );
 
 vector<vec3> colours(SCREEN_HEIGHT);
 
+bool stars_increasing = false;
+vector<vec3> stars( 1000 );
+
+
 /* ----------------------------------------------------------------------------*/
 /* FUNCTIONS                                                                   */
 
@@ -35,14 +42,23 @@ void Draw();
 float Interpolate_f( float start, float end, float step, float max );
 void Interpolate( float start, float end, vector<float>& result );
 void Interpolate_v(vec3 a, vec3 b, vector<vec3> &result);
+void updateStars();
+int rand_i(int min, int max);
+float rand_f();
+glm::vec2 convertTo2D(vec3 coords);
 
 int main( int argc, char* argv[] )
 {
 	screen = InitializeSDL( SCREEN_WIDTH, SCREEN_HEIGHT );
 	t = SDL_GetTicks();	// Set start value for timer.
 
+	// Seed for random numbers
+	srand (static_cast <unsigned> (time(0)));
+
 	Interpolate_v( topLeft, bottomLeft, leftSide );
 	Interpolate_v( topRight, bottomRight, rightSide );
+
+	updateStars();
 
 	while( NoQuitMessageSDL() )
 	{
@@ -54,6 +70,18 @@ int main( int argc, char* argv[] )
 	return 0;
 }
 
+float rand_f(float min, float max) {
+	return min + float(rand()) / float(RAND_MAX/(max - min));
+}
+
+void updateStars() {
+	for(size_t i = 0; i < stars.size(); i++) {
+		float x = rand_f(-1.0, 1.0);
+		float y = rand_f(-1.0, 1.0);
+		float z = rand_f(0.0, 1.0);
+		stars[i] = vec3(x, y, z);
+	}
+}
 
 void Update()
 {
@@ -111,24 +139,43 @@ void Interpolate( float start, float end, vector<float>& result ) {
 	}
 }
 
+vec2 convertTo2D(vec3 coords) {
+		float f = SCREEN_HEIGHT / 2;
+		float u = f * coords.x / coords.z + SCREEN_WIDTH / 2;
+		float v = f * coords.y / coords.z + SCREEN_HEIGHT / 2;
+		return vec2(u, v);
+}
 
 void Draw()
 {
+	// Set screen to black
+	SDL_FillRect( screen, 0, 0 );
+
 	if( SDL_MUSTLOCK(screen) ) {
 		SDL_LockSurface(screen);
 	}
 
-	// TODO: future, add #includes and parralise loops like e.g.
-	// #pragma omp parallel for with Open MP
+	// // TODO: future, add #includes and parralise loops like e.g.
+	// // #pragma omp parallel for with Open MP
+	// for( int y=0; y < SCREEN_HEIGHT; ++y )
+	// {
+	// 	Interpolate_v(leftSide[y], rightSide[y], colours);
+	//
+	// 	for(int x = 0; x < SCREEN_WIDTH; ++x )
+	// 	{
+	// 		PutPixelSDL( screen, x, y, colours[x] );
+	// 	}
+	// }
 
-	for( int y=0; y<SCREEN_HEIGHT; ++y )
-	{
-		Interpolate_v(leftSide[y], rightSide[y], colours);
+	for( size_t s = 0; s < stars.size(); ++s ) {
+		// Move the stars
+		double velocity = 0.001;
+		if(stars[s].z < 1) { stars[s].z += velocity; } else { stars[s].z = 0.0; }
 
-		for(int x = 0; x<SCREEN_WIDTH; ++x )
-		{
-			PutPixelSDL( screen, x, y, colours[x] );
-		}
+		// Code for projecting and drawing each star
+		vec3 color = 0.2f * vec3(1,1,1) / (stars[s].z * stars[s].z);
+		vec2 star = convertTo2D(stars[s]);
+		PutPixelSDL( screen, star.x, star.y, color );
 	}
 
 	if( SDL_MUSTLOCK(screen) )
