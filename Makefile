@@ -12,7 +12,7 @@ GLMDIR=glm
 EXEC=$(B_DIR)/$(FILE)
 
 # default build settings # Can add -O3 to add optimisations
-CC_OPTS=-c -pipe -Wall -Wno-switch -ggdb -g3
+CC_OPTS=-c -pipe -Wall -O3 -Wno-switch -ggdb -g3
 LN_OPTS=
 CC=g++
 
