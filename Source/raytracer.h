@@ -18,7 +18,8 @@ using std::cout;
 using std::vector;
 using std::endl;
 
-struct Intersection {
+struct Intersection
+{
     vec3 position;
     float distance;
     int triangleIndex;
@@ -33,16 +34,16 @@ extern SDL_Surface* screen;
 extern int t;
 extern vector<Triangle> triangles;
 
-float Interpolate_f( float start, float end, float step, float max );
-void Interpolate( float start, float end, vector<float>& result );
-void Interpolate_v(vec3 a, vec3 b, vector<vec3> &result);
+float interpolate_f(float start, float end, float step, float max);
+void interpolate(float start, float end, vector<float>& result);
+void interpolate_v(vec3 a, vec3 b, vector<vec3> &result);
 int rand_i(int min, int max);
 float rand_f();
 vec2 convertTo2D(vec3 coords);
-bool ClosestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles, Intersection& closestIntersection );
-void GetRayDirection(int x, int y, vec3 &rayDir);
+bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles, Intersection& closest);
+void getRayDirection(int x, int y, vec3 &rayDir);
 void printVector(const char* name, vec3 v);
-bool triangleIntersection(vec3 point);
-void Update();
-void Draw();
+bool triangleIntersection(vec3& point);
+void update();
+void draw();
 #endif //RAYTRACER_INCLUDE
