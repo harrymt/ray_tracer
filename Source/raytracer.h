@@ -10,6 +10,10 @@
 #include "SDLauxiliary.h"
 #include "TestModel.h"
 
+#define SCREEN_WIDTH 500
+#define SCREEN_HEIGHT 500
+#define FOCAL_LENGTH SCREEN_HEIGHT / 2.0f
+
 using glm::vec2;
 using glm::vec3;
 using glm::mat3;
@@ -24,15 +28,6 @@ struct Intersection
     float distance;
     int triangleIndex;
 };
-
-const int SCREEN_WIDTH = 500;
-const int SCREEN_HEIGHT = 500;
-const float focalLength = SCREEN_HEIGHT / 2;
-const vec3 cameraPos(0,0,-2);
-
-extern SDL_Surface* screen;
-extern int t;
-extern vector<Triangle> triangles;
 
 float interpolate_f(float start, float end, float step, float max);
 void interpolate(float start, float end, vector<float>& result);

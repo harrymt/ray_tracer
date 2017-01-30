@@ -1,14 +1,9 @@
 #include "raytracer.h"
 
-/* ----------------------------------------------------------------------------*/
-/* GLOBAL VARIABLES                                                            */
-
 SDL_Surface* screen;
 int t;
 vector<Triangle> triangles;
-
-/* ----------------------------------------------------------------------------*/
-/* FUNCTIONS                                                                   */
+const vec3 cameraPos(0, 0, -2);
 
 void update()
 {
@@ -23,12 +18,7 @@ void update()
 void draw()
 {
     // Set screen to black
-    SDL_FillRect(screen, 0, 0);
-
-    if (SDL_MUSTLOCK(screen))
-    {
-        SDL_LockSurface(screen);
-    }
+    if (SDL_MUSTLOCK(screen)) SDL_LockSurface(screen);
 
     for (int y = 0; y < SCREEN_HEIGHT; ++y)
     {
@@ -44,6 +34,7 @@ void draw()
             {
                 color = triangles[closest.triangleIndex].color;
             }
+
             PutPixelSDL(screen, x, y, color);
         }
     }

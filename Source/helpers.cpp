@@ -4,20 +4,34 @@
  * Checks for intersection against all triangles, if found returns true, else false.
  * If intersection found, then return info about the closest intersection.
  */
-bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles, Intersection& closest) 
+bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles, Intersection& closest)
 {
     float m = std::numeric_limits<float>::max();
 
     bool found = false;
     for (size_t i = 0; i < triangles.size(); ++i)
     {
-        vec3 v0 = triangles[i].v0;
-        vec3 v1 = triangles[i].v1;
-        vec3 v2 = triangles[i].v2;
+        const vec3& v0 = triangles[i].v0;
+        const vec3& v1 = triangles[i].v1;
+        const vec3& v2 = triangles[i].v2;
         vec3 edge1 = v1 - v0;
         vec3 edge2 = v2 - v0;
         vec3 b = start - v0;
         mat3 A(-dir, edge1, edge2);
+
+        // Instead of using matrix inverse we can use Cramer's rule
+        // Namely, instead of x = A^-1*b
+        // We have x_i = |A_i|/|A|
+        // With A_i as the replacement of column i in A with b
+        /*vec3 x;
+        float detA = A.determinant();
+        for (int i = 0; i < 3; i++)
+        {
+            mat3 A_i = A.clone();
+            A_i[i] = b;
+            x[i] = A_i.determinant()/detA;
+        }*/
+
         vec3 x = glm::inverse(A) * b; // x = (t,u,v);
 
         // Check iniqualities (7), (8), (9) and (11)
@@ -39,23 +53,17 @@ bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles
     return found;
 }
 
-
-
 void getRayDirection(int x, int y, vec3 &rayDir)
 {
-    float u = x - (SCREEN_WIDTH / 2);
-    float v = y - (SCREEN_HEIGHT / 2);
-    rayDir.x = u;
-    rayDir.y = v;
-    rayDir.z = focalLength;
+    rayDir.x = x - (SCREEN_WIDTH / 2);
+    rayDir.y = y - (SCREEN_HEIGHT / 2);
+    rayDir.z = FOCAL_LENGTH;
 }
-
 
 void printVector(const char* name, vec3 v)
 {
     cout << name << ": " << v.x << "," << v.y << "," << v.z << endl;
 }
-
 
 bool triangleIntersection(vec3& point)
 {
@@ -67,12 +75,12 @@ bool triangleIntersection(vec3& point)
 
 float rand_f(float min, float max)
 {
-    return min + float(rand()) / float(RAND_MAX/(max - min));
+    return min + ((float) rand()) / ((float) (RAND_MAX/(max - min)));
 }
 
 // HOW TO RUN
 //    for( float step = 0; step < result_size; step++ ) {
-//            result[step] = Interpolate_f(start, end, step, result_size);
+//            result[step] = interpolate_f(start, end, step, result_size);
 //    }
 float interpolate_f(float start, float end, float step, float max)
 {
