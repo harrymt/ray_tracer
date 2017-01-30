@@ -6,7 +6,7 @@
  */
 bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles, Intersection& closest)
 {
-    float m = std::numeric_limits<float>::max();
+    float minimumDistance = std::numeric_limits<float>::max();
 
     bool found = false;
     for (size_t i = 0; i < triangles.size(); ++i)
@@ -23,30 +23,42 @@ bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles
         // Namely, instead of x = A^-1*b
         // We have x_i = |A_i|/|A|
         // With A_i as the replacement of column i in A with b
-        vec3 x;
+        //vec3 x;
         float detA = glm::determinant(A);
-        for (int i = 0; i < 3; i++)
+        /*for (int i = 0; i < 3; i++)
         {
             mat3 A_i = A;
             A_i[i] = b;
             x[i] = glm::determinant(A_i)/detA;
-        }
+        }*/
+        mat3 A_i = A;
+        A_i[0] = b;
+        float t = glm::determinant(A_i)/detA;
+        if (t < 0) continue; // inequality 7
+        A_i[0] = A[0];
+        A_i[1] = b;
+        float u = glm::determinant(A_i)/detA;
+        if (u < 0) continue; // inequality 8
+        A_i[1] = A[1];
+        A_i[2] = b;
+        float v = glm::determinant(A_i)/detA;
+        if (v < 0 || (u + v) > 1) continue; // inequalities 9 & 11
 
         // Check inequalities (7), (8), (9) and (11)
-        if (triangleIntersection(x))
+        //if (triangleIntersection(x))
+        //{
+            //float u = x.y, v = x.z;
+        vec3 point = v0 + (edge1 * u) + (edge2 * v);
+        float r = glm::distance(start, point);
+        if(r < minimumDistance)
         {
-            float u = x.y, v = x.z;
-            vec3 point = v0 + (edge1 * u) + (edge2 * v);
-            float r = glm::distance(start, point);
-            if(r < m)
-            {
-                m = r;
-                closest.triangleIndex = i;
-                closest.position = point;
-                closest.distance = r;
-                found = true;
-            }
+            minimumDistance = r;
+            closest.triangleIndex = i;
+            closest.position = point;
+            closest.distance = r;
+            found = true;
         }
+        //}
     }
     return found;
 }
