@@ -23,18 +23,16 @@ bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles
         // Namely, instead of x = A^-1*b
         // We have x_i = |A_i|/|A|
         // With A_i as the replacement of column i in A with b
-        /*vec3 x;
-        float detA = A.determinant();
+        vec3 x;
+        float detA = glm::determinant(A);
         for (int i = 0; i < 3; i++)
         {
-            mat3 A_i = A.clone();
+            mat3 A_i = A;
             A_i[i] = b;
-            x[i] = A_i.determinant()/detA;
-        }*/
+            x[i] = glm::determinant(A_i)/detA;
+        }
 
-        vec3 x = glm::inverse(A) * b; // x = (t,u,v);
-
-        // Check iniqualities (7), (8), (9) and (11)
+        // Check inequalities (7), (8), (9) and (11)
         if (triangleIntersection(x))
         {
             float u = x.y, v = x.z;
