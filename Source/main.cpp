@@ -8,7 +8,6 @@
 #include "SDLauxiliary.h"
 #include "TestModel.h"
 
-using namespace std;
 using glm::vec2;
 using glm::vec3;
 using glm::mat3;
@@ -25,7 +24,7 @@ int t;
 float focalLength = SCREEN_HEIGHT / 2;
 vec3 cameraPos(0,0,-2);
 
-vector<Triangle> triangles;
+std::vector<Triangle> triangles;
 
 
 
@@ -130,7 +129,7 @@ void Draw()
 // Checks for intersection against all triangles, if found returns true, else false.
 // If intersection found, then return info about the closest intersection.
 //
-bool ClosestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles, Intersection& closestIntersection ) {
+bool ClosestIntersection(vec3 start, vec3 dir, const std::vector<Triangle>& triangles, Intersection& closestIntersection ) {
 	float m = std::numeric_limits<float>::max();
 
 	bool found = false;
@@ -202,7 +201,7 @@ float Interpolate_f(float start, float end, float step, float max) {
 
 
 // HOW TO RUN
-// vector<vec3> result( 4 );
+// std::vector<vec3> result( 4 );
 // 	vec3 a(1,4,9.2);
 // 	vec3 b(4,1,9.8);
 // 	Interpolate_v( a, b, result );
@@ -213,7 +212,7 @@ float Interpolate_f(float start, float end, float step, float max) {
 // 		<< result[i].y << ", "
 // 		<< result[i].z << " ) ";
 // 	}
-void Interpolate_v(vec3 a, vec3 b, vector<vec3> &result) {
+void Interpolate_v(vec3 a, vec3 b, std::vector<vec3> &result) {
 	float max_size = result.size();
 	for(float i = 0; i < max_size; i++) {
 		result[i].x = Interpolate_f(a.x, b.x, i, max_size);
@@ -223,11 +222,11 @@ void Interpolate_v(vec3 a, vec3 b, vector<vec3> &result) {
 }
 
 // HOW TO RUN:
-// vector<float> result( 12 ); // Create a vector width 10 floats
+// std::vector<float> result( 12 ); // Create a vector width 10 floats
 // Interpolate( 5, 14, result ); // Fill it with interpolated values
 // for( double i = 0; i < result.size(); i++ )
 // 	cout << result[i] << " "; // Print the result to the terminal
-void Interpolate( float start, float end, vector<float>& result ) {
+void Interpolate( float start, float end, std::vector<float>& result ) {
 	float result_size = (float) result.size();
 
 	if(result_size < 2.0) {
