@@ -1,15 +1,15 @@
-# Name of source file
-FILE=main
-
 ########
 #   Directories
 S_DIR=Source
 B_DIR=Build
 GLMDIR=glm
 
+# Name of source file
+OBJECTS = $(B_DIR)/main.o $(B_DIR)/helpers.o
+
 ########
 #   Output
-EXEC=$(B_DIR)/$(FILE)
+EXEC=$(B_DIR)/raytracer
 
 # default build settings # Can add -O3 to add optimisations
 CC_OPTS=-c -std=c++11 -pipe -Wall -O3 -Wno-switch -ggdb -g3
@@ -25,25 +25,19 @@ SDL_LDFLAGS := $(shell sdl-config --libs)
 ########
 #   This is the default action
 all: clean / Build
-	./Build/$(FILE)
-
-
-########
-#   Object list
-#
-OBJ = $(B_DIR)/$(FILE).o
-
+	$(EXEC)
 
 ########
 #   Objects
-$(B_DIR)/$(FILE).o : $(S_DIR)/$(FILE).cpp $(S_DIR)/SDLauxiliary.h $(S_DIR)/TestModel.h
-	$(CC) $(CC_OPTS) -o $(B_DIR)/$(FILE).o $(S_DIR)/$(FILE).cpp $(SDL_CFLAGS) $(GLM_CFLAGS)
+#$(S_DIR)/SDLauxiliary.h $(S_DIR)/TestModel.h
+$(B_DIR)/%.o : $(S_DIR)/%.cpp 
+	$(CC) $(CC_OPTS) -c $< -o $@ $(SDL_CFLAGS) $(GLM_CFLAGS)
 
 
 ########
 #   Main build rule
-Build: $(OBJ) Makefile
-	$(CC) $(LN_OPTS) -o $(EXEC) $(OBJ) $(SDL_LDFLAGS)
+Build: $(OBJECTS) Makefile
+	$(CC) $(LN_OPTS) -o $(EXEC) $(OBJECTS) $(SDL_LDFLAGS)
 
 
 clean:

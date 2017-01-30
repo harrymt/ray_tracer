@@ -3,7 +3,8 @@
 *.lo
 *.o
 *.obj
-Build/*
+glm/
+Build/
 
 # Precompiled Headers
 *.gch

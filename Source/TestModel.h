@@ -16,13 +16,13 @@ public:
 	glm::vec3 normal;
 	glm::vec3 color;
 
-	Triangle( glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, glm::vec3 color )
+	inline Triangle( glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, glm::vec3 color )
 		: v0(v0), v1(v1), v2(v2), color(color)
 	{
 		ComputeNormal();
 	}
 
-	void ComputeNormal()
+	inline void ComputeNormal()
 	{
 		glm::vec3 e1 = v1-v0;
 		glm::vec3 e2 = v2-v0;
@@ -34,7 +34,7 @@ public:
 // -1 <= x <= +1
 // -1 <= y <= +1
 // -1 <= z <= +1
-void LoadTestModel( std::vector<Triangle>& triangles )
+inline void LoadTestModel( std::vector<Triangle>& triangles )
 {
 	using glm::vec3;
 
