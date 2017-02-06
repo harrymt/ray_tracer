@@ -7,12 +7,14 @@
 #include <cstdlib>
 #include <ctime>
 #include <limits.h>
+#include <cmath>
 #include "SDLauxiliary.h"
 #include "TestModel.h"
 
-#define SCREEN_WIDTH 500
-#define SCREEN_HEIGHT 500
-#define FOCAL_LENGTH SCREEN_HEIGHT / 2.0f
+#define FOCAL 2.0f
+#define SCREEN_WIDTH 250
+#define SCREEN_HEIGHT 250
+#define FOCAL_LENGTH SCREEN_HEIGHT / FOCAL
 
 using glm::vec2;
 using glm::vec3;
