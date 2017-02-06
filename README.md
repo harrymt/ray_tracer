@@ -27,7 +27,7 @@ This is an implementation of a Ray Tracer displaying a render of the [Cornell Bo
 - Trace the ray of each pixel in the camera image into the scene.
 - Compute ray-triangle intersections, to find out which surface a ray hit.
 
-## POssible Extensions
+## Possible Extensions
 
 - Add fog? By increasing the power in that big equation in the exponent
 - Download a material from the MERL database and add it to the scene?
