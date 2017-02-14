@@ -7,6 +7,9 @@ int t;
 vector<Triangle> triangles;
 vec3 cameraPos(0, 0, -FOCAL);
 const float delta_displacement = 0.1f;
+glm::vec3 indirectLight = 0.5f * glm::vec3(1, 1, 1);
+glm::vec3 lightPos(0, -0.5, -0.7);
+glm::vec3 lightColor = 14.f * glm::vec3(1, 1, 1);
 
 const float theta = D2R(5);
 
@@ -67,6 +70,34 @@ void update()
     {
         cameraPos = {0, 0, -FOCAL};
         currentRot = mat3(1, 0, 0, 0, 1, 0, 0, 0, 1);
+    }
+
+
+    if (keystate[SDLK_UP])
+    {
+        lightPos[2] += delta_displacement;
+    }
+    if (keystate[SDLK_DOWN])
+    {
+        lightPos[2] -= delta_displacement;
+    }
+    if (keystate[SDLK_RIGHT])
+    {
+        lightPos[0] += delta_displacement;
+    }
+    if (keystate[SDLK_LEFT])
+    {
+        lightPos[0] -= delta_displacement;
+    }
+
+    if (keystate[SDLK_PAGEUP])
+    {
+        lightPos[1] -= delta_displacement;
+    }
+
+    if (keystate[SDLK_PAGEDOWN])
+    {
+        lightPos[1] += delta_displacement;
     }
 }
 

@@ -1,7 +1,9 @@
 #include "raytracer.h"
 
-glm::vec3 lightPos(0, -0.5, -0.7);
-glm::vec3 lightColor = 14.f * glm::vec3(1, 1, 1);
+
+extern glm::vec3 indirectLight;
+extern glm::vec3 lightPos;
+extern glm::vec3 lightColor;
 
 /**
  * Calculates the direct light from an intersection.
