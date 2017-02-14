@@ -16,6 +16,9 @@
 #define SCREEN_HEIGHT 250
 #define FOCAL_LENGTH SCREEN_HEIGHT / FOCAL
 
+constexpr float pi = atan(1.0);
+
+
 using glm::vec2;
 using glm::vec3;
 using glm::mat3;
@@ -31,6 +34,7 @@ struct Intersection
     int triangleIndex;
 };
 
+vec3 directLight(const Intersection &i, Triangle closestTriangle);
 float interpolate_f(float start, float end, float step, float max);
 void interpolate(float start, float end, vector<float>& result);
 void interpolate_v(vec3 a, vec3 b, vector<vec3> &result);

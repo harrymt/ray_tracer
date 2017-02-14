@@ -7,7 +7,7 @@ int t;
 vector<Triangle> triangles;
 vec3 cameraPos(0, 0, -FOCAL);
 const float delta_displacement = 0.1f;
-constexpr float pi = atan(1.0);
+
 const float theta = D2R(5);
 
 const mat3 rota(cos(theta),  0, sin(theta),
@@ -82,7 +82,7 @@ void draw()
 
             if (closestIntersection(cameraPos, rayDir, triangles, closest))
             {
-                color = triangles[closest.triangleIndex].color;
+                color = directLight(closest, triangles[closest.triangleIndex]); // uncomment if you want to add color // * triangles[closest.triangleIndex].color;
             }
 
             PutPixelSDL(screen, x, y, color);

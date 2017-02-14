@@ -1,5 +1,29 @@
 #include "raytracer.h"
 
+glm::vec3 lightPos(0, -0.5, -0.7);
+glm::vec3 lightColor = 14.f * glm::vec3(1, 1, 1);
+
+/**
+ * Calculates the direct light from an intersection.
+ */
+vec3 directLight(const Intersection &i, Triangle closestTriangle) {
+  float distFromLightPosandIntersectionPos = glm::distance(i.position, lightPos); // r
+
+  // (25)
+	float A = 4 * pi * (distFromLightPosandIntersectionPos * distFromLightPosandIntersectionPos);
+
+	vec3 powerPerArea = lightColor / A; // P / A0
+
+	vec3 directionFromSurfaceToLight = glm::normalize(lightPos - i.position); // r hat
+	vec3 normalOfSurface = glm::normalize(closestTriangle.normal); // n hat
+
+  // (27)
+	vec3 directIllumination = powerPerArea * glm::max(glm::dot(directionFromSurfaceToLight, normalOfSurface), 0.0f); // D
+
+	return directIllumination;
+}
+
+
 /*
  * Checks for intersection against all triangles, if found returns true, else false.
  * If intersection found, then return info about the closest intersection.
