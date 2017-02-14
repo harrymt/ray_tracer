@@ -90,7 +90,7 @@ void draw()
 
             if (closestIntersection(cameraPos, rayDir, triangles, closest))
             {
-                color = directLight(closest, triangles[closest.triangleIndex]); // uncomment if you want to add color // * triangles[closest.triangleIndex].color;
+                color = directLight(closest, triangles[closest.triangleIndex]) * triangles[closest.triangleIndex].color;
             }
 
             PutPixelSDL(screen, x, y, color);
