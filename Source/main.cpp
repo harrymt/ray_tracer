@@ -31,19 +31,27 @@ void update()
     Uint8* keystate = SDL_GetKeyState(0);
     if (keystate[SDLK_w])
     {
+        cameraPos = cameraPos * glm::inverse(currentRot);
         cameraPos[2] += delta_displacement;
+        cameraPos = cameraPos * currentRot;
     }
     if (keystate[SDLK_s])
     {
+        cameraPos = cameraPos * glm::inverse(currentRot);
         cameraPos[2] -= delta_displacement;
+        cameraPos = cameraPos * currentRot;
     }
     if (keystate[SDLK_d])
     {
+        cameraPos = cameraPos * glm::inverse(currentRot);
         cameraPos[0] += delta_displacement;
+        cameraPos = cameraPos * currentRot;
     }
     if (keystate[SDLK_a])
     {
+        cameraPos = cameraPos * glm::inverse(currentRot);
         cameraPos[0] -= delta_displacement;
+        cameraPos = cameraPos * currentRot;
     }
     if (keystate[SDLK_q])
     {
