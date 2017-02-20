@@ -9,8 +9,7 @@ vec3 cameraPos(0, 0, -FOCAL);
 const float delta_displacement = 0.1f;
 glm::vec3 indirectLight = 0.5f * glm::vec3(1, 1, 1);
 glm::vec3 lightPos(0, -0.5, -0.7);
-glm::vec3 lightColor = 14.f * glm::vec3(1, 1, 1
-glm::vec3 indirectLight = 0.5f * glm::vec3(1, 1, 1);
+glm::vec3 lightColor = 14.f * glm::vec3(1, 1, 1);
 
 const float theta = D2R(5);
 
@@ -106,26 +105,35 @@ void update()
 
 void draw()
 {
-    vec3 color(0.0, 0.0, 0.0);
+    vec3 colour(0.0, 0.0, 0.0);
 
-    for (int y = 0; y < SCREEN_HEIGHT; ++y)
+    for (int y = 0; y < SCREEN_HEIGHT; y += SSAA)
     {
-        for (int x = 0; x < SCREEN_WIDTH; ++x)
+        for (int x = 0; x < SCREEN_WIDTH; x += SSAA)
         {
-            vec3 rayDir;
-            getRayDirection(x, y, rayDir);
-            rayDir = rayDir * currentRot;
-
-            Intersection closest;
-            color = {0.0, 0.0, 0.0}; // Set default colour to black
-
-            if (closestIntersection(cameraPos, rayDir, triangles, closest))
+            colour = {0.0, 0.0, 0.0};
+            for (int i = 0; i < SSAA; ++i)
             {
-                vec3 direct = directLight(closest, triangles[closest.triangleIndex]);
-                color = direct * indirectLight * triangles[closest.triangleIndex].color;
-            }
+                for (int j = 0; j < SSAA; ++j)
+                {
+                    vec3 rayDir;
+                    getRayDirection(x, y, rayDir);
+                    rayDir = rayDir * currentRot;
+                    Intersection closest;
+                    vec3 partial_colour(0.0, 0.0, 0.0);
 
-            PutPixelSDL(screen, x, y, color);
+                    if (closestIntersection(cameraPos, rayDir, triangles, closest))
+                    {
+                        vec3 direct = directLight(closest, triangles[closest.triangleIndex]);
+                        partial_colour = direct * indirectLight * triangles[closest.triangleIndex].color;
+                    }
+
+                    colour += partial_colour;
+                }
+            }
+            colour /= (SSAA*SSAA);
+
+            PutPixelSDL(screen, x/SSAA, y/SSAA, colour);
         }
     }
 
@@ -135,7 +143,7 @@ void draw()
 
 int main()
 {
-    screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT);
+    screen = InitializeSDL(TRUE_SCREEN_WIDTH, TRUE_SCREEN_HEIGHT);
     t = SDL_GetTicks();
 
     // Fill triangles with test model
