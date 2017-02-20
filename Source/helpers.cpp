@@ -9,32 +9,33 @@ extern glm::vec3 lightColor;
  * Calculates the direct light from an intersection.
  */
 vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<Triangle>& triangles) {
-	vec3 directionFromSurfaceToLight = glm::normalize(lightPos - i.position); // r hat
-  float distFromLightPosandIntersectionPos = glm::distance(i.position, lightPos); // r
-  vec3 normalOfSurface = glm::normalize(closestTriangle.normal); // n hat
+    vec3 directionFromSurfaceToLight = glm::normalize(lightPos - i.position); // r hat
+    float distFromLightPosandIntersectionPos = glm::distance(i.position, lightPos); // r
+    vec3 normalOfSurface = glm::normalize(closestTriangle.normal); // n hat
 
-  Intersection intersectFromThis;
+    Intersection intersectFromThis;
 
-  glm::vec3 colour = lightColor;
+    glm::vec3 colour = lightColor;
 
-  // Check intersection from intersection to lightsource
-  if(closestIntersection(i.position, directionFromSurfaceToLight, triangles, intersectFromThis)) {
-      // If in shadow, darken the colour
-      if(intersectFromThis.triangleIndex != i.triangleIndex && intersectFromThis.distance < glm::length(directionFromSurfaceToLight)) {
-        colour -= vec3(10.5f, 10.5f, 10.5f);
-        // return vec3(0.0f, 0.0f, 0.0f);
-      }
-  }
+    // Check intersection from intersection to lightsource
+    if(closestIntersection(i.position, directionFromSurfaceToLight, triangles, intersectFromThis))
+    {
+        // If in shadow, darken the colour
+        if(intersectFromThis.triangleIndex != i.triangleIndex && intersectFromThis.distance < glm::length(directionFromSurfaceToLight))
+        {
+            colour -= vec3(10.5f, 10.5f, 10.5f);
+        }
+    }
 
-  // (25)
-	float area = 4 * pi * (distFromLightPosandIntersectionPos * distFromLightPosandIntersectionPos);
+    // (25)
+    float area = 4 * pi * (distFromLightPosandIntersectionPos * distFromLightPosandIntersectionPos);
 
-	vec3 powerPerArea = colour / area; // P / A0
+    vec3 powerPerArea = colour / area; // P / A0
 
-  // (27)
-	vec3 directIllumination = powerPerArea * glm::max(glm::dot(directionFromSurfaceToLight, normalOfSurface), 0.0f); // D
+    // (27)
+    vec3 directIllumination = powerPerArea * glm::max(glm::dot(directionFromSurfaceToLight, normalOfSurface), 0.0f); // D
 
-	return directIllumination;
+    return directIllumination;
 }
 
 
@@ -61,14 +62,7 @@ bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles
         // Namely, instead of x = A^-1*b
         // We have x_i = |A_i|/|A|
         // With A_i as the replacement of column i in A with b
-        //vec3 x;
         float detA = glm::determinant(A);
-        /*for (int i = 0; i < 3; i++)
-        {
-            mat3 A_i = A;
-            A_i[i] = b;
-            x[i] = glm::determinant(A_i)/detA;
-        }*/
         mat3 A_i = A;
         A_i[0] = b;
         float t = glm::determinant(A_i)/detA;
@@ -82,13 +76,9 @@ bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles
         float v = glm::determinant(A_i)/detA;
         if (v < 0.0f || (u + v) > 1.0f) continue; // inequalities 9 & 11
 
-        // cout << t << "\n";
         if(t < FLT_EPSILON) continue;
 
         // Check inequalities (7), (8), (9) and (11)
-        //if (triangleIntersection(x))
-        //{
-            //float u = x.y, v = x.z;
         vec3 point = v0 + (edge1 * u) + (edge2 * v);
         float r = glm::distance(start, point);
         if(r < minimumDistance)
@@ -99,7 +89,6 @@ bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles
             closest.distance = r;
             found = true;
         }
-        //}
     }
     return found;
 }
@@ -129,27 +118,11 @@ float rand_f(float min, float max)
     return min + ((float) rand()) / ((float) (RAND_MAX/(max - min)));
 }
 
-// HOW TO RUN
-//    for( float step = 0; step < result_size; step++ ) {
-//            result[step] = interpolate_f(start, end, step, result_size);
-//    }
 float interpolate_f(float start, float end, float step, float max)
 {
     return (end - start) * (step / (max - 1)) + start;
 }
 
-// HOW TO RUN
-// vector<vec3> result( 4 );
-//     vec3 a(1,4,9.2);
-//     vec3 b(4,1,9.8);
-//     Interpolate_v( a, b, result );
-//     for( int i=0; i<result.size(); ++i )
-//     {
-//         cout << "( "
-//         << result[i].x << ", "
-//         << result[i].y << ", "
-//         << result[i].z << " ) ";
-//     }
 void interpolate_v(vec3 a, vec3 b, vector<vec3> &result)
 {
     float max_size = result.size();
@@ -161,11 +134,6 @@ void interpolate_v(vec3 a, vec3 b, vector<vec3> &result)
     }
 }
 
-// HOW TO RUN:
-// vector<float> result( 12 ); // Create a vector width 10 floats
-// Interpolate( 5, 14, result ); // Fill it with interpolated values
-// for( double i = 0; i < result.size(); i++ )
-//     cout << result[i] << " "; // Print the result to the terminal
 void interpolate(float start, float end, vector<float>& result)
 {
     float result_size = (float) result.size();
