@@ -12,8 +12,8 @@
 #include "TestModel.h"
 
 #define FOCAL 2.0f
-#define SCREEN_WIDTH 250
-#define SCREEN_HEIGHT 250
+#define SCREEN_WIDTH 750
+#define SCREEN_HEIGHT 750
 #define FOCAL_LENGTH SCREEN_HEIGHT / FOCAL
 
 constexpr float pi = atan(1.0);
