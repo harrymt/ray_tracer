@@ -104,9 +104,6 @@ void update()
 
 void draw()
 {
-    // Set screen to black
-    if (SDL_MUSTLOCK(screen)) SDL_LockSurface(screen);
-
     for (int y = 0; y < SCREEN_HEIGHT; ++y)
     {
         for (int x = 0; x < SCREEN_WIDTH; ++x)
