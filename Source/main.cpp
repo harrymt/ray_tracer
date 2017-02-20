@@ -117,7 +117,7 @@ void draw()
                 for (int j = 0; j < SSAA; ++j)
                 {
                     vec3 rayDir;
-                    getRayDirection(x, y, rayDir);
+                    getRayDirection(x + i, y + j, rayDir);
                     rayDir = rayDir * currentRot;
                     Intersection closest;
                     vec3 partial_colour(0.0, 0.0, 0.0);
