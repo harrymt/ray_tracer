@@ -1,5 +1,5 @@
 #include "raytracer.h"
-
+#include "float.h"
 
 extern glm::vec3 indirectLight;
 extern glm::vec3 lightPos;
@@ -21,7 +21,8 @@ vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<T
   if(closestIntersection(i.position, directionFromSurfaceToLight, triangles, intersectFromThis)) {
       // If in shadow, darken the colour
       if(intersectFromThis.triangleIndex != i.triangleIndex && intersectFromThis.distance < glm::length(directionFromSurfaceToLight)) {
-        return vec3(0.0f, 0.0f, 0.0f);
+        colour -= vec3(10.5f, 10.5f, 10.5f);
+        // return vec3(0.0f, 0.0f, 0.0f);
       }
   }
 
@@ -82,7 +83,7 @@ bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles
         if (v < 0.0f || (u + v) > 1.0f) continue; // inequalities 9 & 11
 
         // cout << t << "\n";
-        if(t < 0.001f) continue;
+        if(t < FLT_EPSILON) continue;
 
         // Check inequalities (7), (8), (9) and (11)
         //if (triangleIntersection(x))
