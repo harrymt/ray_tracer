@@ -124,7 +124,7 @@ void draw()
 
                     if (closestIntersection(cameraPos, rayDir, triangles, closest))
                     {
-                        vec3 direct = directLight(closest, triangles[closest.triangleIndex]);
+                        vec3 direct = directLight(closest, triangles[closest.triangleIndex], triangles);
                         partial_colour = direct * indirectLight * triangles[closest.triangleIndex].color;
                     }
 

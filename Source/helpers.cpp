@@ -8,16 +8,27 @@ extern glm::vec3 lightColor;
 /**
  * Calculates the direct light from an intersection.
  */
-vec3 directLight(const Intersection &i, Triangle closestTriangle) {
+vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<Triangle>& triangles) {
+	vec3 directionFromSurfaceToLight = glm::normalize(lightPos - i.position); // r hat
   float distFromLightPosandIntersectionPos = glm::distance(i.position, lightPos); // r
+  vec3 normalOfSurface = glm::normalize(closestTriangle.normal); // n hat
+
+  Intersection intersectFromThis;
+
+  // Check intersection from intersection to lightsource
+  closestIntersection(i.position, directionFromSurfaceToLight, triangles, intersectFromThis);
+
+  glm::vec3 colour = lightColor;
+
+  // If in shadow, darken the colour
+  if(intersectFromThis.triangleIndex != i.triangleIndex && intersectFromThis.distance < glm::length(directionFromSurfaceToLight)) {
+    colour = colour - vec3(10.0f, 10.0f, 10.0f);
+  }
 
   // (25)
-	float A = 4 * pi * (distFromLightPosandIntersectionPos * distFromLightPosandIntersectionPos);
+	float area = 4 * pi * (distFromLightPosandIntersectionPos * distFromLightPosandIntersectionPos);
 
-	vec3 powerPerArea = lightColor / A; // P / A0
-
-	vec3 directionFromSurfaceToLight = glm::normalize(lightPos - i.position); // r hat
-	vec3 normalOfSurface = glm::normalize(closestTriangle.normal); // n hat
+	vec3 powerPerArea = colour / area; // P / A0
 
   // (27)
 	vec3 directIllumination = powerPerArea * glm::max(glm::dot(directionFromSurfaceToLight, normalOfSurface), 0.0f); // D
@@ -60,15 +71,18 @@ bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles
         mat3 A_i = A;
         A_i[0] = b;
         float t = glm::determinant(A_i)/detA;
-        if (t < 0) continue; // inequality 7
+        if (t < 0.0f) continue; // inequality 7
         A_i[0] = A[0];
         A_i[1] = b;
         float u = glm::determinant(A_i)/detA;
-        if (u < 0) continue; // inequality 8
+        if (u < 0.0f) continue; // inequality 8
         A_i[1] = A[1];
         A_i[2] = b;
         float v = glm::determinant(A_i)/detA;
-        if (v < 0 || (u + v) > 1) continue; // inequalities 9 & 11
+        if (v < 0.0f || (u + v) > 1.0f) continue; // inequalities 9 & 11
+
+        // cout << t << "\n";
+        if(t < 0.001f) continue;
 
         // Check inequalities (7), (8), (9) and (11)
         //if (triangleIntersection(x))

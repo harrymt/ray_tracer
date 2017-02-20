@@ -14,7 +14,7 @@
 #define FOCAL 2.0f
 #define TRUE_SCREEN_WIDTH 300
 #define TRUE_SCREEN_HEIGHT 300
-#define SSAA 2
+#define SSAA 1
 #define SCREEN_WIDTH TRUE_SCREEN_WIDTH * SSAA
 #define SCREEN_HEIGHT TRUE_SCREEN_HEIGHT * SSAA
 #define FOCAL_LENGTH SCREEN_HEIGHT / FOCAL
@@ -37,7 +37,7 @@ struct Intersection
     int triangleIndex;
 };
 
-vec3 directLight(const Intersection &i, Triangle closestTriangle);
+vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<Triangle>& triangles);
 float interpolate_f(float start, float end, float step, float max);
 void interpolate(float start, float end, vector<float>& result);
 void interpolate_v(vec3 a, vec3 b, vector<vec3> &result);
