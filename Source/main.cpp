@@ -9,7 +9,8 @@ vec3 cameraPos(0, 0, -FOCAL);
 const float delta_displacement = 0.1f;
 glm::vec3 indirectLight = 0.5f * glm::vec3(1, 1, 1);
 glm::vec3 lightPos(0, -0.5, -0.7);
-glm::vec3 lightColor = 14.f * glm::vec3(1, 1, 1);
+glm::vec3 lightColor = 14.f * glm::vec3(1, 1, 1
+glm::vec3 indirectLight = 0.5f * glm::vec3(1, 1, 1);
 
 const float theta = D2R(5);
 
@@ -69,6 +70,7 @@ void update()
     if (keystate[SDLK_r])
     {
         cameraPos = {0, 0, -FOCAL};
+        lightPos = {0, -0.5, -0.7};
         currentRot = mat3(1, 0, 0, 0, 1, 0, 0, 0, 1);
     }
 
@@ -104,6 +106,8 @@ void update()
 
 void draw()
 {
+    vec3 color(0.0, 0.0, 0.0);
+
     for (int y = 0; y < SCREEN_HEIGHT; ++y)
     {
         for (int x = 0; x < SCREEN_WIDTH; ++x)
@@ -112,13 +116,13 @@ void draw()
             getRayDirection(x, y, rayDir);
             rayDir = rayDir * currentRot;
 
-
             Intersection closest;
-            vec3 color(0.0, 0.0, 0.0);
+            color = {0.0, 0.0, 0.0}; // Set default colour to black
 
             if (closestIntersection(cameraPos, rayDir, triangles, closest))
             {
-                color = directLight(closest, triangles[closest.triangleIndex]) * triangles[closest.triangleIndex].color;
+                vec3 direct = directLight(closest, triangles[closest.triangleIndex]);
+                color = direct * indirectLight * triangles[closest.triangleIndex].color;
             }
 
             PutPixelSDL(screen, x, y, color);
