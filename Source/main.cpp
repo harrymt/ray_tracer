@@ -1,4 +1,5 @@
 #include "raytracer.h"
+#include "omp.h"
 
 #define D2R(x) x*pi/180
 
@@ -105,19 +106,18 @@ void update()
 
 void draw()
 {
-    vec3 colour(0.0, 0.0, 0.0);
-
+    #pragma omp parallel for
     for (int y = 0; y < SCREEN_HEIGHT; y += SSAA)
     {
         for (int x = 0; x < SCREEN_WIDTH; x += SSAA)
         {
-            colour = {0.0, 0.0, 0.0};
+            vec3 colour(0.0, 0.0, 0.0);
             for (int i = 0; i < SSAA; ++i)
             {
                 for (int j = 0; j < SSAA; ++j)
                 {
                     vec3 rayDir;
-                    getRayDirection(x, y, rayDir);
+                    getRayDirection(x + i, y + j, rayDir);
                     rayDir = rayDir * currentRot;
                     Intersection closest;
                     vec3 partial_colour(0.0, 0.0, 0.0);
