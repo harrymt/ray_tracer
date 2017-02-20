@@ -15,14 +15,14 @@ vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<T
 
   Intersection intersectFromThis;
 
-  // Check intersection from intersection to lightsource
-  closestIntersection(i.position, directionFromSurfaceToLight, triangles, intersectFromThis);
-
   glm::vec3 colour = lightColor;
 
-  // If in shadow, darken the colour
-  if(intersectFromThis.triangleIndex != i.triangleIndex && intersectFromThis.distance < glm::length(directionFromSurfaceToLight)) {
-    colour = colour - vec3(10.0f, 10.0f, 10.0f);
+  // Check intersection from intersection to lightsource
+  if(closestIntersection(i.position, directionFromSurfaceToLight, triangles, intersectFromThis)) {
+      // If in shadow, darken the colour
+      if(intersectFromThis.triangleIndex != i.triangleIndex && intersectFromThis.distance < glm::length(directionFromSurfaceToLight)) {
+        return vec3(0.0f, 0.0f, 0.0f);
+      }
   }
 
   // (25)
