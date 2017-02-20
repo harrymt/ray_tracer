@@ -104,24 +104,34 @@ void update()
 
 void draw()
 {
-    for (int y = 0; y < SCREEN_HEIGHT; ++y)
+    for (int y = 0; y < SCREEN_HEIGHT; y += SSAA)
     {
-        for (int x = 0; x < SCREEN_WIDTH; ++x)
+        for (int x = 0; x < SCREEN_WIDTH; x += SSAA)
         {
-            vec3 rayDir;
-            getRayDirection(x, y, rayDir);
-            rayDir = rayDir * currentRot;
-
-
-            Intersection closest;
-            vec3 color(0.0, 0.0, 0.0);
-
-            if (closestIntersection(cameraPos, rayDir, triangles, closest))
+            vec3 colour(0.0, 0.0, 0.0);
+            for (int i = 0; i < SSAA; ++i)
             {
-                color = directLight(closest, triangles[closest.triangleIndex]) * triangles[closest.triangleIndex].color;
-            }
+                for (int j = 0; j < SSAA; ++j)
+                {
+                    vec3 rayDir;
+                    getRayDirection(x, y, rayDir);
+                    rayDir = rayDir * currentRot;
 
-            PutPixelSDL(screen, x, y, color);
+
+                    Intersection closest;
+                    vec3 partial_colour(0.0, 0.0, 0.0);
+
+                    if (closestIntersection(cameraPos, rayDir, triangles, closest))
+                    {
+                        partial_colour = directLight(closest, triangles[closest.triangleIndex]) * triangles[closest.triangleIndex].color;
+                    }
+
+                    colour += partial_colour;
+                }
+            }
+            colour /= (SSAA*SSAA);
+
+            PutPixelSDL(screen, x/SSAA, y/SSAA, colour);
         }
     }
 
@@ -131,7 +141,7 @@ void draw()
 
 int main()
 {
-    screen = InitializeSDL(SCREEN_WIDTH, SCREEN_HEIGHT);
+    screen = InitializeSDL(TRUE_SCREEN_WIDTH, TRUE_SCREEN_HEIGHT);
     t = SDL_GetTicks();
 
     // Fill triangles with test model
