@@ -18,6 +18,7 @@
 #define SCREEN_WIDTH TRUE_SCREEN_WIDTH * SSAA
 #define SCREEN_HEIGHT TRUE_SCREEN_HEIGHT * SSAA
 #define FOCAL_LENGTH SCREEN_HEIGHT / FOCAL
+#define SHADOW_STR 10.5f
 
 constexpr float pi = atan(1.0);
 
