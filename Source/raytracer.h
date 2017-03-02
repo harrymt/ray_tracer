@@ -14,11 +14,12 @@
 #define FOCAL 2.0f
 #define TRUE_SCREEN_WIDTH 750
 #define TRUE_SCREEN_HEIGHT 750
-#define SSAA 8
+#define SSAA 1
 #define SCREEN_WIDTH TRUE_SCREEN_WIDTH * SSAA
 #define SCREEN_HEIGHT TRUE_SCREEN_HEIGHT * SSAA
 #define FOCAL_LENGTH SCREEN_HEIGHT / FOCAL
 #define SHADOW_STR 10.5f
+#define BIAS 10000
 
 constexpr float pi = atan(1.0);
 

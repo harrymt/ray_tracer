@@ -66,7 +66,7 @@ bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles
         mat3 A_i = A;
         A_i[0] = b;
         float t = glm::determinant(A_i)/detA;
-        if (t < FLT_EPSILON) continue; // inequality 7
+        if (t < 0.0f) continue; // inequality 7
         A_i[0] = A[0];
         A_i[1] = b;
         float u = glm::determinant(A_i)/detA;
@@ -75,6 +75,8 @@ bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles
         A_i[2] = b;
         float v = glm::determinant(A_i)/detA;
         if (v < 0.0f || (u + v) > 1.0f) continue; // inequalities 9 & 11
+
+        if (t < FLT_EPSILON*BIAS) continue;
 
         // Check inequalities (7), (8), (9) and (11)
         vec3 point = v0 + (edge1 * u) + (edge2 * v);
