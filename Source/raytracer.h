@@ -2,6 +2,7 @@
 #define RAYTRACER_INCLUDE
 #include <iostream>
 #include <glm/glm.hpp>
+#include "glm/ext.hpp"
 #include <SDL.h>
 #include <stdexcept>
 #include <cstdlib>
@@ -14,14 +15,14 @@
 #define FOCAL 2.0f
 #define TRUE_SCREEN_WIDTH 750
 #define TRUE_SCREEN_HEIGHT 750
-#define SSAA 1
+#define SSAA 4
 #define SCREEN_WIDTH TRUE_SCREEN_WIDTH * SSAA
 #define SCREEN_HEIGHT TRUE_SCREEN_HEIGHT * SSAA
 #define FOCAL_LENGTH SCREEN_HEIGHT / FOCAL
-#define SHADOW_STR 10.5f
-#define BIAS 10000
-#define SOFT_SHADOW_SAMPLES 10
-#define SOFT_SHADOW_MAX_OFFSET 0.5
+#define SHADOW_STR 12.5f
+#define BIAS 1
+#define SOFT_SHADOW_SAMPLES 20
+#define SOFT_SHADOW_MAX_OFFSET 0.01f
 
 constexpr float pi = atan(1.0);
 

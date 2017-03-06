@@ -155,9 +155,10 @@ int main()
     #pragma omp parallel for
     for (int i = 1; i < SOFT_SHADOW_SAMPLES; ++i)
     {
-        int x = rand() % 100;
-        int y = rand() % 100;
-        lightSample[i] = glm::vec3(lightPos[0] + x * SOFT_SHADOW_MAX_OFFSET, lightPos[1] + y * SOFT_SHADOW_MAX_OFFSET, lightPos[2]);
+        float x = glm::linearRand(-SOFT_SHADOW_MAX_OFFSET, SOFT_SHADOW_MAX_OFFSET);
+        float y = glm::linearRand(-SOFT_SHADOW_MAX_OFFSET, SOFT_SHADOW_MAX_OFFSET);
+        float z = glm::linearRand(-SOFT_SHADOW_MAX_OFFSET, SOFT_SHADOW_MAX_OFFSET);
+        lightSample[i] = glm::vec3(lightPos[0] + x, lightPos[1] + y, lightPos[2] + z);
     }
 
     while (NoQuitMessageSDL())

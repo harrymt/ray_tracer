@@ -17,20 +17,19 @@ vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<T
         vec3 directionFromSurfaceToLight = glm::normalize(lightSample[j] - i.position); // r hat
         float distFromLightPosandIntersectionPos = glm::distance(i.position, lightSample[j]); // r
         vec3 normalOfSurface = glm::normalize(closestTriangle.normal); // n hat
-
-        Intersection intersectFromThis;
-
         glm::vec3 colour = lightColor;
 
         // Check intersection from intersection to lightsource
+        Intersection intersectFromThis;
         if(closestIntersection(i.position, directionFromSurfaceToLight, triangles, intersectFromThis))
         {
             // If in shadow, darken the colour
-            continue;
-            /*if(intersectFromThis.triangleIndex != i.triangleIndex && intersectFromThis.distance < glm::length(directionFromSurfaceToLight))
+            //continue;
+            if(intersectFromThis.triangleIndex != i.triangleIndex && intersectFromThis.distance < glm::length(directionFromSurfaceToLight))
             {
+                //colour = vec3(0.0f, 0.0f, 0.0f);
                 colour -= vec3(SHADOW_STR, SHADOW_STR, SHADOW_STR);
-            }*/
+            }
         }
 
         // (25)
@@ -41,9 +40,10 @@ vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<T
         // (27)
         vec3 directIllumination = powerPerArea * glm::max(glm::dot(directionFromSurfaceToLight, normalOfSurface), 0.0f); // D
         directIlluminationSum += directIllumination;
+        //return directIllumination;
     }
-
-    return directIlluminationSum/SOFT_SHADOW_SAMPLES;
+    directIlluminationSum /= SOFT_SHADOW_SAMPLES;
+    return directIlluminationSum;
 }
 
 
