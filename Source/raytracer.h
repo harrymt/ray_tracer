@@ -20,9 +20,10 @@
 #define FOCAL_LENGTH SCREEN_HEIGHT / FOCAL
 #define SHADOW_STR 10.5f
 #define BIAS 10000
+#define SOFT_SHADOW_SAMPLES 10
+#define SOFT_SHADOW_MAX_OFFSET 0.5
 
 constexpr float pi = atan(1.0);
-
 
 using glm::vec2;
 using glm::vec3;
