@@ -15,14 +15,14 @@
 #define FOCAL 2.0f
 #define TRUE_SCREEN_WIDTH 750
 #define TRUE_SCREEN_HEIGHT 750
-#define SSAA 4
+#define SSAA 8
 #define SCREEN_WIDTH TRUE_SCREEN_WIDTH * SSAA
 #define SCREEN_HEIGHT TRUE_SCREEN_HEIGHT * SSAA
 #define FOCAL_LENGTH SCREEN_HEIGHT / FOCAL
 #define SHADOW_STR 12.5f
 #define BIAS 1
-#define SOFT_SHADOW_SAMPLES 20
-#define SOFT_SHADOW_MAX_OFFSET 0.01f
+#define SOFT_SHADOW_SAMPLES 80
+#define SOFT_SHADOW_MAX_OFFSET 0.02f // was 1 with 20 samples
 
 constexpr float pi = atan(1.0);
 
