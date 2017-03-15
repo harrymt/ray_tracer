@@ -11,6 +11,7 @@ const float delta_displacement = 0.1f;
 glm::vec3 indirectLight = 0.5f * glm::vec3(1, 1, 1);
 glm::vec3 lightPos(0, -0.5, -0.7);
 glm::vec3 lightColor = 14.f * glm::vec3(1, 1, 1);
+glm::vec3 lightSample[SOFT_SHADOW_SAMPLES];
 
 const float theta = D2R(5);
 
@@ -148,6 +149,17 @@ int main()
 
     // Fill triangles with test model
     LoadTestModel(triangles);
+
+    // Generate random light samples
+    lightSample[0] = lightPos;
+    #pragma omp parallel for
+    for (int i = 1; i < SOFT_SHADOW_SAMPLES; ++i)
+    {
+        float x = glm::linearRand(-SOFT_SHADOW_MAX_OFFSET, SOFT_SHADOW_MAX_OFFSET);
+        float y = glm::linearRand(-SOFT_SHADOW_MAX_OFFSET, SOFT_SHADOW_MAX_OFFSET);
+        float z = glm::linearRand(-SOFT_SHADOW_MAX_OFFSET, SOFT_SHADOW_MAX_OFFSET);
+        lightSample[i] = glm::vec3(lightPos[0] + x, lightPos[1] + y, lightPos[2] + z);
+    }
 
     while (NoQuitMessageSDL())
     {

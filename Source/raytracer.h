@@ -2,6 +2,7 @@
 #define RAYTRACER_INCLUDE
 #include <iostream>
 #include <glm/glm.hpp>
+#include "glm/ext.hpp"
 #include <SDL.h>
 #include <stdexcept>
 #include <cstdlib>
@@ -18,9 +19,12 @@
 #define SCREEN_WIDTH TRUE_SCREEN_WIDTH * SSAA
 #define SCREEN_HEIGHT TRUE_SCREEN_HEIGHT * SSAA
 #define FOCAL_LENGTH SCREEN_HEIGHT / FOCAL
+#define SHADOW_STR 12.5f
+#define BIAS 1
+#define SOFT_SHADOW_SAMPLES 80
+#define SOFT_SHADOW_MAX_OFFSET 0.02f // was 1 with 20 samples
 
 constexpr float pi = atan(1.0);
-
 
 using glm::vec2;
 using glm::vec3;

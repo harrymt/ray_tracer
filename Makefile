@@ -12,7 +12,7 @@ OBJECTS = $(B_DIR)/main.o $(B_DIR)/helpers.o
 EXEC=$(B_DIR)/raytracer
 
 # default build settings # Can add -O3 to add optimisations
-CC_OPTS=-c -std=c++11 -fopenmp -pipe -Wall -pedantic -Wextra -O3 -Wno-switch -ggdb -g3 -lpthread
+CC_OPTS=-c -std=c++11 -fopenmp -pipe -Wall -pedantic -Wextra -O3 -Wno-switch -ggdb -g3 -lpthread -march=native -mtune=native -mfpmath=sse -msse4.2 #-ffast-math
 LN_OPTS=-fopenmp
 CC=g++
 
