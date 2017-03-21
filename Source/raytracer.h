@@ -13,15 +13,15 @@
 #include "TestModel.h"
 
 #define FOCAL 2.0f
-#define TRUE_SCREEN_WIDTH 750
-#define TRUE_SCREEN_HEIGHT 750
-#define SSAA 16
+#define TRUE_SCREEN_WIDTH 500
+#define TRUE_SCREEN_HEIGHT 500
+#define SSAA 1
 #define SCREEN_WIDTH TRUE_SCREEN_WIDTH * SSAA
 #define SCREEN_HEIGHT TRUE_SCREEN_HEIGHT * SSAA
 #define FOCAL_LENGTH SCREEN_HEIGHT / FOCAL
 #define SHADOW_STR 12.5f
 #define BIAS 1
-#define SOFT_SHADOW_SAMPLES 80
+#define SOFT_SHADOW_SAMPLES 2
 #define SOFT_SHADOW_MAX_OFFSET 0.02f // was 1 with 20 samples
 
 constexpr float pi = atan(1.0);
@@ -54,4 +54,5 @@ void printVector(const char* name, vec3 v);
 bool triangleIntersection(vec3& point);
 void update();
 void draw();
+void generateLightSample();
 #endif //RAYTRACER_INCLUDE

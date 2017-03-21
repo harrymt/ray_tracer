@@ -72,6 +72,7 @@ void update()
     {
         cameraPos = {0, 0, -FOCAL};
         lightPos = {0, -0.5, -0.7};
+        generateLightSample();
         currentRot = mat3(1, 0, 0, 0, 1, 0, 0, 0, 1);
     }
 
@@ -79,28 +80,34 @@ void update()
     if (keystate[SDLK_UP])
     {
         lightPos[2] += delta_displacement;
+        generateLightSample();
     }
     if (keystate[SDLK_DOWN])
     {
         lightPos[2] -= delta_displacement;
+        generateLightSample();
     }
     if (keystate[SDLK_RIGHT])
     {
         lightPos[0] += delta_displacement;
+        generateLightSample();
     }
     if (keystate[SDLK_LEFT])
     {
         lightPos[0] -= delta_displacement;
+        generateLightSample();
     }
 
     if (keystate[SDLK_PAGEUP])
     {
         lightPos[1] -= delta_displacement;
+        generateLightSample();
     }
 
     if (keystate[SDLK_PAGEDOWN])
     {
         lightPos[1] += delta_displacement;
+        generateLightSample();
     }
 }
 
@@ -142,15 +149,7 @@ void draw()
     SDL_UpdateRect(screen, 0, 0, 0, 0);
 }
 
-int main()
-{
-    screen = InitializeSDL(TRUE_SCREEN_WIDTH, TRUE_SCREEN_HEIGHT);
-    t = SDL_GetTicks();
-
-    // Fill triangles with test model
-    LoadTestModel(triangles);
-
-    // Generate random light samples
+void generateLightSample() {
     lightSample[0] = lightPos;
     #pragma omp parallel for
     for (int i = 1; i < SOFT_SHADOW_SAMPLES; ++i)
@@ -160,6 +159,18 @@ int main()
         float z = glm::linearRand(-SOFT_SHADOW_MAX_OFFSET, SOFT_SHADOW_MAX_OFFSET);
         lightSample[i] = glm::vec3(lightPos[0] + x, lightPos[1] + y, lightPos[2] + z);
     }
+}
+
+int main()
+{
+    screen = InitializeSDL(TRUE_SCREEN_WIDTH, TRUE_SCREEN_HEIGHT);
+    t = SDL_GetTicks();
+
+    // Fill triangles with test model
+    LoadTestModel(triangles);
+
+    // Generate random light samples
+    generateLightSample();
 
     while (NoQuitMessageSDL())
     {
