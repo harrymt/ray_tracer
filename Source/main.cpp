@@ -139,9 +139,9 @@ void draw()
                     colour += partial_colour;
                 }
             }
-            colour /= (SSAA*SSAA);
+            colour /= (SSAA * SSAA);
 
-            PutPixelSDL(screen, x/SSAA, y/SSAA, colour);
+            PutPixelSDL(screen, x / SSAA, y / SSAA, colour);
         }
     }
 

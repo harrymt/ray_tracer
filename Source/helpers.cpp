@@ -12,11 +12,14 @@ extern glm::vec3 lightSample[SOFT_SHADOW_SAMPLES];
 vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<Triangle>& triangles)
 {
     vec3 directIlluminationSum(0.0f, 0.0f, 0.0f);
+    vec3 normalOfSurface = glm::normalize(closestTriangle.normal); // n hat
+
+    // const float INTERSECT_BIAS = 0.02f;
+
     for (int j = 0; j < SOFT_SHADOW_SAMPLES; ++j)
     {
         vec3 directionFromSurfaceToLight = glm::normalize(lightSample[j] - i.position); // r hat
         float distFromLightPosandIntersectionPos = glm::distance(i.position, lightSample[j]); // r
-        vec3 normalOfSurface = glm::normalize(closestTriangle.normal); // n hat
         glm::vec3 colour = lightColor;
 
         // Check intersection from intersection to lightsource
@@ -24,10 +27,9 @@ vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<T
         if(closestIntersection(i.position, directionFromSurfaceToLight, triangles, intersectFromThis))
         {
             // If in shadow, darken the colour
-            //continue;
-            if(intersectFromThis.triangleIndex != i.triangleIndex && intersectFromThis.distance < glm::length(directionFromSurfaceToLight))
+            if(intersectFromThis.triangleIndex != i.triangleIndex &&
+                intersectFromThis.distance <= (glm::length(directionFromSurfaceToLight) + SOFT_SHADOW_MAX_OFFSET))
             {
-                //colour = vec3(0.0f, 0.0f, 0.0f);
                 colour -= vec3(SHADOW_STR, SHADOW_STR, SHADOW_STR);
             }
         }
@@ -40,7 +42,6 @@ vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<T
         // (27)
         vec3 directIllumination = powerPerArea * glm::max(glm::dot(directionFromSurfaceToLight, normalOfSurface), 0.0f); // D
         directIlluminationSum += directIllumination;
-        //return directIllumination;
     }
     directIlluminationSum /= SOFT_SHADOW_SAMPLES;
     return directIlluminationSum;
@@ -73,23 +74,23 @@ bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles
         float detA = glm::determinant(A);
         mat3 A_i = A;
         A_i[0] = b;
-        float t = glm::determinant(A_i)/detA;
-        if (t < 0.0f) continue; // inequality 7
+        float t = glm::determinant(A_i) / detA;
+        if (t < FLT_EPSILON * BIAS) continue; // inequality 7
         A_i[0] = A[0];
         A_i[1] = b;
-        float u = glm::determinant(A_i)/detA;
+        float u = glm::determinant(A_i) / detA;
         if (u < 0.0f) continue; // inequality 8
         A_i[1] = A[1];
         A_i[2] = b;
-        float v = glm::determinant(A_i)/detA;
+        float v = glm::determinant(A_i) / detA;
         if (v < 0.0f || (u + v) > 1.0f) continue; // inequalities 9 & 11
 
-        if (t < FLT_EPSILON*BIAS) continue;
+
 
         // Check inequalities (7), (8), (9) and (11)
-        vec3 point = v0 + (edge1 * u) + (edge2 * v);
+        vec3 point = v0 + (edge1 * u) + (edge2 * v); // start + t * dir;
         float r = glm::distance(start, point);
-        if(r < minimumDistance)
+        if(r <= minimumDistance)
         {
             minimumDistance = r;
             closest.triangleIndex = i;
