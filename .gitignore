@@ -29,3 +29,25 @@ Build/
 *.exe
 *.out
 *.app
+
+# Visual Studio
+Source/glm
+.vs/
+Source/.vs/
+Source/Debug/
+Source/ray_tracer.aps
+Source/ray_tracer.rc
+Source/ray_tracer.sln
+Source/ray_tracer.vcxproj
+Source/ray_tracer.vcxproj.*
+*.vcxproj.*
+Source/ray_tracer.VC.*
+Source/x64/*
+ray_tracer.sln
+ray_tracer.VC.db
+ray_tracer.vcxproj
+ray_tracer.VC.db
+ray_tracer.vcxproj
+Source/ray_tracer.sln
+Source/ray_tracer.VC.db
+Source/ray_tracer.vcxproj

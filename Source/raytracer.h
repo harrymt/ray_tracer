@@ -24,7 +24,7 @@
 #define SOFT_SHADOW_SAMPLES 1
 #define SOFT_SHADOW_MAX_OFFSET 0.02f // was 1 with 20 samples
 
-constexpr float pi = atan(1.0);
+const float pi = atan(1.0);
 
 using glm::vec2;
 using glm::vec3;
