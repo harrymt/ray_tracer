@@ -51,3 +51,5 @@ ray_tracer.vcxproj
 Source/ray_tracer.sln
 Source/ray_tracer.VC.db
 Source/ray_tracer.vcxproj
+ray_tracer/*
+Debug/*
