@@ -15,14 +15,14 @@
 #define FOCAL 2.0f
 #define TRUE_SCREEN_WIDTH 1000
 #define TRUE_SCREEN_HEIGHT 1000
-#define SSAA 1
+#define SSAA 16
 #define SCREEN_WIDTH TRUE_SCREEN_WIDTH * SSAA
 #define SCREEN_HEIGHT TRUE_SCREEN_HEIGHT * SSAA
 #define FOCAL_LENGTH SCREEN_HEIGHT / FOCAL
 #define SHADOW_STR 12.5f
 #define BIAS 1e-4
-#define SOFT_SHADOW_SAMPLES 1
-#define SOFT_SHADOW_MAX_OFFSET 0.02f // was 1 with 20 samples
+#define SOFT_SHADOW_SAMPLES 300
+#define SOFT_SHADOW_MAX_OFFSET 0.01f // was 1 with 20 samples
 
 const float pi = atan(1.0);
 
@@ -41,14 +41,14 @@ struct Intersection
     int triangleIndex;
 };
 
-vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<Triangle>& triangles);
+vec3 directLight(const Intersection &i, Triangle& closestTriangle, const Triangle* triangles, const size_t num_triangles);
 float interpolate_f(float start, float end, float step, float max);
 void interpolate(float start, float end, vector<float>& result);
 void interpolate_v(vec3 a, vec3 b, vector<vec3> &result);
 int rand_i(int min, int max);
 float rand_f();
 vec2 convertTo2D(vec3 coords);
-bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles, Intersection& closest);
+bool closestIntersection(vec3 start, vec3 dir, const Triangle* triangles, const size_t num_triangles, Intersection& closest);
 void getRayDirection(int x, int y, vec3 &rayDir);
 void printVector(const char* name, vec3 v);
 bool triangleIntersection(vec3& point);

@@ -9,7 +9,7 @@ extern glm::vec3 lightSample[SOFT_SHADOW_SAMPLES];
 /**
  * Calculates the direct light from an intersection.
  */
-vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<Triangle>& triangles)
+vec3 directLight(const Intersection &i, Triangle& closestTriangle, const Triangle* triangles, const size_t num_triangles)
 {
     vec3 directIlluminationSum(0.0f, 0.0f, 0.0f);
     vec3 normalOfSurface = glm::normalize(closestTriangle.normal); // n hat
@@ -24,7 +24,7 @@ vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<T
 
         // Check intersection from intersection to lightsource
         Intersection intersectFromThis;
-        if(closestIntersection(i.position, directionFromSurfaceToLight, triangles, intersectFromThis))
+        if(closestIntersection(i.position, directionFromSurfaceToLight, triangles, num_triangles, intersectFromThis))
         {
             // If in shadow, darken the colour
             if(intersectFromThis.triangleIndex != i.triangleIndex &&
@@ -52,18 +52,16 @@ vec3 directLight(const Intersection &i, Triangle closestTriangle, const vector<T
  * Checks for intersection against all triangles, if found returns true, else false.
  * If intersection found, then return info about the closest intersection.
  */
-bool closestIntersection(vec3 start, vec3 dir, const vector<Triangle>& triangles, Intersection& closest)
+bool closestIntersection(vec3 start, vec3 dir, const Triangle* triangles, const size_t num_triangles, Intersection& closest)
 {
     float minimumDistance = std::numeric_limits<float>::max();
 
     bool found = false;
-    for (size_t i = 0; i < triangles.size(); ++i)
+    for (size_t i = 0; i < num_triangles; ++i)
     {
         const vec3& v0 = triangles[i].v0;
-        const vec3& v1 = triangles[i].v1;
-        const vec3& v2 = triangles[i].v2;
-        vec3 edge1 = v1 - v0;
-        vec3 edge2 = v2 - v0;
+		vec3 edge1 = triangles[i].v1 - v0;
+		vec3 edge2 = triangles[i].v2 - v0;
         vec3 b = start - v0;
         mat3 A(-dir, edge1, edge2);
 

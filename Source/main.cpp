@@ -5,7 +5,9 @@
 
 SDL_Surface* screen;
 int t;
-vector<Triangle> triangles;
+Triangle* triangles;
+size_t num_triangles;
+
 vec3 cameraPos(0, 0, -FOCAL);
 const float delta_displacement = 0.1f;
 glm::vec3 indirectLight = 0.5f * glm::vec3(1, 1, 1);
@@ -114,6 +116,10 @@ void update()
 
 void draw()
 {
+	int num_complete = 0;
+	int num_required = TRUE_SCREEN_HEIGHT * TRUE_SCREEN_WIDTH;
+	int percent_complete = 0;
+	std::cout << "percent complete: 0%";
     #pragma omp parallel for
     for (int y = 0; y < SCREEN_HEIGHT; y += SSAA)
     {
@@ -130,9 +136,9 @@ void draw()
                     Intersection closest;
                     vec3 partial_colour(0.0, 0.0, 0.0);
 
-                    if (closestIntersection(cameraPos, rayDir, triangles, closest))
+                    if (closestIntersection(cameraPos, rayDir, triangles, num_triangles, closest))
                     {
-                        vec3 direct = directLight(closest, triangles[closest.triangleIndex], triangles);
+						vec3 direct = directLight(closest, triangles[closest.triangleIndex], triangles, num_triangles);
                         partial_colour = direct * indirectLight * triangles[closest.triangleIndex].color;
                     }
 
@@ -142,6 +148,15 @@ void draw()
             colour /= (SSAA * SSAA);
 
             PutPixelSDL(screen, x / SSAA, y / SSAA, colour);
+			// Just for visual cues
+			num_complete++;
+			if (num_complete > (percent_complete * num_required / 100))
+			{
+				percent_complete++;
+				if (percent_complete > 10) std::cout << "\b";
+				std::cout << "\b\b" << percent_complete << "%";
+				if (percent_complete == 100) std::cout << std::endl;
+			}
         }
     }
 
@@ -150,6 +165,7 @@ void draw()
 }
 
 void generateLightSample() {
+	srand(time(0));
     lightSample[0] = lightPos;
     #pragma omp parallel for
     for (int i = 1; i < SOFT_SHADOW_SAMPLES; ++i)
@@ -165,18 +181,34 @@ int main()
 {
     screen = InitializeSDL(TRUE_SCREEN_WIDTH, TRUE_SCREEN_HEIGHT);
     t = SDL_GetTicks();
+	/*We should use arrays, makes it a lot faster!*/
+	vector<Triangle> triangles_;
 
     // Fill triangles with test model
-    LoadTestModel(triangles);
+    LoadTestModel(triangles_);
+
+	num_triangles = triangles_.size();
+	triangles = new Triangle[num_triangles];
+
+	for (size_t i = 0; i < num_triangles; ++i)
+	{
+		triangles[i] = triangles_[i];
+	}
 
     // Generate random light samples
     generateLightSample();
+
+	omp_set_num_threads(6);
 
     while (NoQuitMessageSDL())
     {
         update();
         draw();
+		// For windows?
+		SDL_SaveBMP(screen, "screenshot.bmp");
     }
+
+	delete[] triangles;
 
     SDL_SaveBMP(screen, "screenshot.bmp");
     return 0;
