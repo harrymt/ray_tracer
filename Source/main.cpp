@@ -120,7 +120,7 @@ void draw()
 	int num_required = TRUE_SCREEN_HEIGHT * TRUE_SCREEN_WIDTH;
 	int percent_complete = 0;
 	std::cout << "percent complete: 0%";
-    #pragma omp parallel for
+#pragma omp parallel for schedule(dynamic,16)
     for (int y = 0; y < SCREEN_HEIGHT; y += SSAA)
     {
         for (int x = 0; x < SCREEN_WIDTH; x += SSAA)
@@ -139,7 +139,13 @@ void draw()
                     if (closestIntersection(cameraPos, rayDir, triangles, num_triangles, closest))
                     {
 						vec3 direct = directLight(closest, triangles[closest.triangleIndex], triangles, num_triangles);
-                        partial_colour = direct * indirectLight * triangles[closest.triangleIndex].color;
+						//if (direct == vec3(0.f, 0.f, 0.f))
+						//{
+						//	partial_colour = gather(closest.position, direct, colour);
+						//	//cout << partial_colour.r << " " << partial_colour.g << " " << partial_colour.b << std::endl;
+						//}
+						//else 
+							partial_colour = direct * indirectLight * triangles[closest.triangleIndex].color + gather(closest.position, direct, colour);
                     }
 
                     colour += partial_colour;
@@ -152,6 +158,7 @@ void draw()
 			num_complete++;
 			if (num_complete > (percent_complete * num_required / 100))
 			{
+				SDL_UpdateRect(screen, 0, 0, 0, 0);
 				percent_complete++;
 				if (percent_complete > 10) std::cout << "\b";
 				std::cout << "\b\b" << percent_complete << "%";
@@ -161,7 +168,7 @@ void draw()
     }
 
     if (SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
-    SDL_UpdateRect(screen, 0, 0, 0, 0);
+    //SDL_UpdateRect(screen, 0, 0, 0, 0);
 }
 
 void generateLightSample() {
@@ -198,15 +205,28 @@ int main()
     // Generate random light samples
     generateLightSample();
 
-	omp_set_num_threads(6);
+	//omp_set_num_threads(6);
 
-    while (NoQuitMessageSDL())
+	std::vector<photon_t> photons = generateMap();
+	std::cout << photons.size() << std::endl;
+
+    //do
     {
+		SDL_FillRect(screen, 0, 0);
         update();
         draw();
+		/*if (SDL_MUSTLOCK(screen)) SDL_LockSurface(screen);
+		for (auto photon : photons)
+		{
+			vec2 point = convertTo2D(vec3(photon.x-cameraPos.x, photon.y-cameraPos.y, photon.z-cameraPos.z));
+			//std::cout << point.x << " " << point.y << std::endl;
+			PutPixelSDL(screen, point.x, point.y, photon.colour*photon.lum);
+		}
+		if (SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);//*/
+		SDL_UpdateRect(screen, 0, 0, 0, 0);
 		// For windows?
 		SDL_SaveBMP(screen, "screenshot.bmp");
-    }
+	} while (NoQuitMessageSDL());
 
 	delete[] triangles;
 

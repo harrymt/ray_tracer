@@ -30,7 +30,8 @@ vec3 directLight(const Intersection &i, Triangle& closestTriangle, const Triangl
             if(intersectFromThis.triangleIndex != i.triangleIndex &&
                 intersectFromThis.distance <= (glm::length(directionFromSurfaceToLight) + SOFT_SHADOW_MAX_OFFSET))
             {
-                colour -= vec3(SHADOW_STR, SHADOW_STR, SHADOW_STR);
+                //colour -= vec3(SHADOW_STR, SHADOW_STR, SHADOW_STR);
+				colour = vec3(0.f, 0.f, 0.f);
             }
         }
 
