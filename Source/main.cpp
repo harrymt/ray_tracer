@@ -158,12 +158,12 @@ void draw()
 			num_complete++;
 			if (num_complete > (percent_complete * num_required / 100))
 			{
-				SDL_UpdateRect(screen, 0, 0, 0, 0);
 				percent_complete++;
 				if (percent_complete > 10) std::cout << "\b";
 				std::cout << "\b\b" << percent_complete << "%";
 				if (percent_complete == 100) std::cout << std::endl;
 			}
+			SDL_UpdateRect(screen, 0, 0, 0, 0);
         }
     }
 

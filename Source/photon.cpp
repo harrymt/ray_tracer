@@ -130,5 +130,6 @@ glm::vec3 gather(vec3 pos, vec3 normal)
 		sum_dist += 1.0f;// / sqrt(dist);
 	}
 	gather_colour /= 2.4f*sum_dist;
-	return gather_colour;
+	
+	return glm::clamp(gather_colour, vec3(0.f, 0.f, 0.f), vec3(1.f, 1.f, 1.f));;
 }
