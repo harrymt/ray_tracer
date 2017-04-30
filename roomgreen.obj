@@ -1,0 +1,9 @@
+# OBJ file format with ext .obj
+# vertex count = 8
+# face count = 10
+v 0 0 0
+v 0 0 555
+v 0 555 0
+v 0 555 555
+f 3 1 2
+f 4 3 2

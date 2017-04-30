@@ -152,30 +152,29 @@ inline void LoadTestModel( std::vector<Triangle>& triangles )
     triangles.push_back( Triangle(G,F,E,white) );
     triangles.push_back( Triangle(G,H,F,white) );
 
+	// ----------------------------------------------
+	// Scale to the volume [-1,1]^3
 
-    // ----------------------------------------------
-    // Scale to the volume [-1,1]^3
+	for (Triangle& triangle : triangles)
+	{
+		triangle.v0 *= 2 / L;
+		triangle.v1 *= 2 / L;
+		triangle.v2 *= 2 / L;
 
-    for( size_t i=0; i<triangles.size(); ++i )
-    {
-        triangles[i].v0 *= 2/L;
-        triangles[i].v1 *= 2/L;
-        triangles[i].v2 *= 2/L;
+		triangle.v0 -= vec3(1, 1, 1);
+		triangle.v1 -= vec3(1, 1, 1);
+		triangle.v2 -= vec3(1, 1, 1);
 
-        triangles[i].v0 -= vec3(1,1,1);
-        triangles[i].v1 -= vec3(1,1,1);
-        triangles[i].v2 -= vec3(1,1,1);
+		triangle.v0.x *= -1;
+		triangle.v1.x *= -1;
+		triangle.v2.x *= -1;
 
-        triangles[i].v0.x *= -1;
-        triangles[i].v1.x *= -1;
-        triangles[i].v2.x *= -1;
+		triangle.v0.y *= -1;
+		triangle.v1.y *= -1;
+		triangle.v2.y *= -1;
 
-        triangles[i].v0.y *= -1;
-        triangles[i].v1.y *= -1;
-        triangles[i].v2.y *= -1;
-
-        triangles[i].ComputeNormal();
-    }
+		triangle.ComputeNormal();
+	}
 }
 
 #endif

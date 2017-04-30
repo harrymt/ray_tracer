@@ -65,4 +65,6 @@ void draw();
 std::vector<photon_t> generateMap();
 glm::vec3 gather(vec3& pos, Triangle& triangle);
 void generateLightSample();
+void load(std::string name, glm::vec3 colour, std::vector<Triangle>& triangles);
+void scale(std::vector<Triangle>& triangles, float size);
 #endif //RAYTRACER_INCLUDE

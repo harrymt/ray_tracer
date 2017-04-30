@@ -1,6 +1,6 @@
 #include "raytracer.h"
 
-#define NUM_PHOTONS 250000
+#define NUM_PHOTONS 2500//00
 #define SEARCH_RADIUS 0.4
 
 extern glm::vec3 lightPos;

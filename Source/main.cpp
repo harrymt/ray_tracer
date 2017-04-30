@@ -182,11 +182,14 @@ int main()
 {
     screen = InitializeSDL(TRUE_SCREEN_WIDTH, TRUE_SCREEN_HEIGHT);
     t = SDL_GetTicks();
-	/*We should use arrays, makes it a lot faster!*/
 	vector<Triangle> triangles_;
-
     // Fill triangles with test model
-    LoadTestModel(triangles_);
+	load("roomwhite.obj", vec3(0.86f, 0.86f, 0.76f),    triangles_);
+	load("roomred.obj",   vec3(0.239f, 0.008f, 0.031f), triangles_);
+	load("roomgreen.obj", vec3(0.031f, 0.239f, 0.008f), triangles_);
+	load("cube.obj",      vec3(0.86f, 0.86f, 0.76f),    triangles_);
+	load("cuboid.obj",    vec3(0.86f, 0.86f, 0.76f),    triangles_);
+	scale(triangles_, 555);
 
 	num_triangles = triangles_.size();
 	triangles = new Triangle[num_triangles];
