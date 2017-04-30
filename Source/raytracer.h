@@ -43,7 +43,8 @@ struct Intersection
 
 struct photon_t
 {
-	float x, y, z;
+	//float x, y, z;
+	vec3 pos;
 	vec3 colour;
 	float lum;
 };
@@ -62,6 +63,6 @@ bool triangleIntersection(vec3& point);
 void update();
 void draw();
 std::vector<photon_t> generateMap();
-glm::vec3 gather(vec3 pos, glm::vec3 normal);
+glm::vec3 gather(vec3& pos, Triangle& triangle);
 void generateLightSample();
 #endif //RAYTRACER_INCLUDE
