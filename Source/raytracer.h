@@ -15,7 +15,7 @@
 #define FOCAL 2.0f
 #define TRUE_SCREEN_WIDTH 500
 #define TRUE_SCREEN_HEIGHT 500
-#define SSAA 1
+#define SSAA 4
 #define SCREEN_WIDTH TRUE_SCREEN_WIDTH * SSAA
 #define SCREEN_HEIGHT TRUE_SCREEN_HEIGHT * SSAA
 #define FOCAL_LENGTH SCREEN_HEIGHT / FOCAL
@@ -62,6 +62,6 @@ bool triangleIntersection(vec3& point);
 void update();
 void draw();
 std::vector<photon_t> generateMap();
-glm::vec3 gather(vec3 pos, glm::vec3 directLight, glm::vec3 colour);
+glm::vec3 gather(vec3 pos, glm::vec3 normal);
 void generateLightSample();
 #endif //RAYTRACER_INCLUDE

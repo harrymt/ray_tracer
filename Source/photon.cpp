@@ -1,8 +1,8 @@
 #include "raytracer.h"
 
-#define NUM_PHOTONS 1000000
+#define NUM_PHOTONS 100000
 #define N 20
-#define SEARCH_RADIUS 0.15
+#define SEARCH_RADIUS 0.2
 
 extern glm::vec3 lightPos;
 extern Triangle* triangles;
@@ -74,7 +74,7 @@ std::vector<photon_t> generateMap()
 	return photons;
 }
 
-glm::vec3 gather(vec3 pos, glm::vec3 directLight, glm::vec3 colour)
+glm::vec3 gather(vec3 pos, vec3 normal)
 {
 	// Here is a pos with a certain illumination and a certain colour
 	// We need to find the N nearest photons to it, average out their colour
@@ -112,7 +112,12 @@ glm::vec3 gather(vec3 pos, glm::vec3 directLight, glm::vec3 colour)
 		float dist = glm::distance(vec3(photon.x, photon.y, photon.z), pos);
 		if (dist < SEARCH_RADIUS)
 		{
-			nearest.push_back(&photon);
+			// additional constraint, we will ensure we only act on the plane normal to our intersection
+			float dot = glm::dot(pos - vec3(photon.x, photon.y, photon.z), normal);
+			if (0.0f <= dot && dot <= std::numeric_limits<float>::min())
+			{
+				nearest.push_back(&photon);
+			}
 		}
 	}
 
@@ -121,8 +126,8 @@ glm::vec3 gather(vec3 pos, glm::vec3 directLight, glm::vec3 colour)
 	for (photon_t* photon : nearest)
 	{
 		float dist = glm::distance(vec3(photon->x, photon->y, photon->z), pos);
-		gather_colour += photon->colour *1.0f / sqrt(dist);
-		sum_dist += 1.0f / sqrt(dist);
+		gather_colour += photon->colour *1.0f;// / sqrt(dist);
+		sum_dist += 1.0f;// / sqrt(dist);
 	}
 	gather_colour /= 2.4f*sum_dist;
 	return gather_colour;

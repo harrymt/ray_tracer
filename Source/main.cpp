@@ -145,7 +145,7 @@ void draw()
 						//	//cout << partial_colour.r << " " << partial_colour.g << " " << partial_colour.b << std::endl;
 						//}
 						//else 
-							partial_colour = direct * indirectLight * triangles[closest.triangleIndex].color + gather(closest.position, direct, colour);
+						partial_colour = direct * indirectLight * triangles[closest.triangleIndex].color + gather(closest.position, triangles[closest.triangleIndex].normal);
                     }
 
                     colour += partial_colour;
