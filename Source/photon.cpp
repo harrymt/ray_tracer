@@ -89,7 +89,6 @@ glm::vec3 gather(vec3& pos, Triangle& triangle)
 			// additional constraint, we will ensure we only act on the plane normal to our intersection
 
 			float dot = glm::dot(triangle.v0 - photon.pos, triangle.normal);
-			//if (-std::numeric_limits<float>::min()*10.0f <= dot && dot <= std::numeric_limits<float>::min()*10.0f)
 			if (dot == 0.0f)
 			{
 				nearest.push_back(&photon);
@@ -98,14 +97,13 @@ glm::vec3 gather(vec3& pos, Triangle& triangle)
 	}
 
 	vec3 gather_colour(0.0f, 0.0f, 0.0f);
-	float sum_dist = 0.0f;
+	int n = 0;
 	for (photon_t* photon : nearest)
 	{
-		float dist = glm::distance(photon->pos, pos);
-		gather_colour += glm::clamp(photon->colour, vec3(0.f, 0.f, 0.f), vec3(1.f, 1.f, 1.f));// *1.0f / sqrt(dist);
-		sum_dist += 1.0f;// / sqrt(dist);
+		gather_colour += glm::clamp(photon->colour, vec3(0.f, 0.f, 0.f), vec3(1.f, 1.f, 1.f));
+		n++;
 	}
-	gather_colour /= 2.4f*sum_dist;
+	gather_colour /= 2.4f*n;
 	
 	return glm::clamp(gather_colour, vec3(0.f, 0.f, 0.f), vec3(1.f, 1.f, 1.f));
 }

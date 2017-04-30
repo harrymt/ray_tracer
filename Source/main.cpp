@@ -120,7 +120,7 @@ void draw()
 	int num_required = TRUE_SCREEN_HEIGHT * TRUE_SCREEN_WIDTH;
 	int percent_complete = 0;
 	std::cout << "percent complete: 0%";
-#pragma omp parallel for schedule(dynamic,16)
+#pragma omp parallel for schedule(dynamic,2)
 	for (int y = 0/*+625*/; y < SCREEN_HEIGHT/* - 100*/; y += SSAA)
     {
 		for (int x = 0/*+450*/; x < SCREEN_WIDTH/* - 250*/; x += SSAA)
@@ -139,12 +139,6 @@ void draw()
                     if (closestIntersection(cameraPos, rayDir, triangles, num_triangles, closest))
                     {
 						vec3 direct = directLight(closest, triangles[closest.triangleIndex], triangles, num_triangles);
-						//if (direct == vec3(0.f, 0.f, 0.f))
-						//{
-						//	partial_colour = gather(closest.position, direct, colour);
-						//	//cout << partial_colour.r << " " << partial_colour.g << " " << partial_colour.b << std::endl;
-						//}
-						//else 
 						partial_colour = direct * indirectLight * triangles[closest.triangleIndex].color + gather(closest.position, triangles[closest.triangleIndex]);
                     }
 
