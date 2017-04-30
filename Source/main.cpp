@@ -121,9 +121,9 @@ void draw()
 	int percent_complete = 0;
 	std::cout << "percent complete: 0%";
 #pragma omp parallel for schedule(dynamic,16)
-	for (int y = 0+625; y < SCREEN_HEIGHT - 100; y += SSAA)
+	for (int y = 0/*+625*/; y < SCREEN_HEIGHT/* - 100*/; y += SSAA)
     {
-		for (int x = 0+450; x < SCREEN_WIDTH - 250; x += SSAA)
+		for (int x = 0/*+450*/; x < SCREEN_WIDTH/* - 250*/; x += SSAA)
         {
             vec3 colour(0.0, 0.0, 0.0);
             for (int i = 0; i < SSAA; ++i)

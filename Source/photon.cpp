@@ -1,6 +1,6 @@
 #include "raytracer.h"
 
-#define NUM_PHOTONS 200000
+#define NUM_PHOTONS 250000
 #define SEARCH_RADIUS 0.4
 
 extern glm::vec3 lightPos;
@@ -28,7 +28,7 @@ std::vector<photon_t> generateMap()
 		dir = glm::normalize(dir);
 		glm::vec3 pos = lightPos;
 		glm::vec3 colour = glm::vec3(1, 1, 1);
-		float lum = 3.f;// / NUM_PHOTONS;
+		float lum = 5.f;// / NUM_PHOTONS;
 		Intersection closest;
 		bool first = true;
 		while (lum > 0)
