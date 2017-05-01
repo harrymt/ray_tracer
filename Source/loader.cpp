@@ -1,7 +1,7 @@
 #include "raytracer.h"
 #include <fstream>
 
-void load(std::string name, glm::vec3 colour, std::vector<Triangle>& triangles, bool invert)
+void load(std::string name, glm::vec3 colour, std::vector<Triangle>& triangles)
 {
 	std::ifstream file(name);
 	char buffer[128];
@@ -27,7 +27,6 @@ void load(std::string name, glm::vec3 colour, std::vector<Triangle>& triangles, 
 				file >> a >> b >> c;
 				--a; --b; --c;
 				Triangle triangle(vertices[a], vertices[b], vertices[c], colour);
-				if (invert) triangle.invert();
 				triangles.push_back(triangle);
 				break;
 			}

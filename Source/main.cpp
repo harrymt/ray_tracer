@@ -224,6 +224,7 @@ int main()
 		if (SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);//*/
 		SDL_UpdateRect(screen, 0, 0, 0, 0);
 		// For windows?
+		update();
 		SDL_SaveBMP(screen, "screenshot.bmp");
 	} while (NoQuitMessageSDL());
 

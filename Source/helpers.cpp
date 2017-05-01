@@ -83,17 +83,15 @@ bool closestIntersection(vec3 start, vec3 dir, const Triangle* triangles, const 
         float v = glm::determinant(A_i) / detA;
         if (v < 0.0f || (u + v) > 1.0f) continue; // inequalities 9 & 11
 
-
-
         // Check inequalities (7), (8), (9) and (11)
         vec3 point = v0 + (edge1 * u) + (edge2 * v); // start + t * dir;
-        float r = glm::distance(start, point);
+        float r = glm::distance2(start, point); // slight optimisation, don't calculate the sqrt unless you need to
         if(r <= minimumDistance)
         {
             minimumDistance = r;
             closest.triangleIndex = i;
             closest.position = point;
-            closest.distance = r;
+            closest.distance = sqrt(r);
             found = true;
         }
     }

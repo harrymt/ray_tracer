@@ -40,13 +40,15 @@ public:
 	glm::vec3 v0;
 	glm::vec3 v1;
 	glm::vec3 v2;
+	//glm::vec3 e1;
+	//glm::vec3 e2;
 	glm::vec3 normal;
 	glm::vec3 color;
-	bool invert_;
+	float normal_length;
 
 	inline Triangle(){}
 	inline Triangle(glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, glm::vec3 color)
-		: v0(v0), v1(v1), v2(v2), color(color), invert_(false)
+		: v0(v0), v1(v1), v2(v2), color(color)
 	{
 		ComputeNormal();
 	}
@@ -56,18 +58,7 @@ public:
 		glm::vec3 e1 = v1 - v0;
 		glm::vec3 e2 = v2 - v0;
 		normal = glm::normalize(glm::cross(e2, e1));
-		if (invert_)
-		{
-			normal.x = -normal.x;
-			normal.y = -normal.y;
-			normal.z = -normal.z;
-		}
-	}
-
-	inline void invert()
-	{
-		invert_ = true;
-		ComputeNormal();
+		normal_length = glm::length(normal);
 	}
 
 	inline float area()
@@ -90,7 +81,7 @@ struct photon_t
 	vec3 pos;
 	vec3 colour;
 	vec3 normal;
-	float lum;
+	float normal_length;
 };
 
 vec3 directLight(const Intersection &i, Triangle& closestTriangle, const Triangle* triangles, const size_t num_triangles);
@@ -109,6 +100,6 @@ void draw();
 std::vector<photon_t> generateMap();
 glm::vec3 gather(vec3& pos, Triangle& triangle);
 void generateLightSample();
-void load(std::string name, glm::vec3 colour, std::vector<Triangle>& triangles, bool invert = false);
+void load(std::string name, glm::vec3 colour, std::vector<Triangle>& triangles);
 void scale(std::vector<Triangle>& triangles, float size);
 #endif //RAYTRACER_INCLUDE
