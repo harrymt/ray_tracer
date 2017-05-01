@@ -13,7 +13,7 @@ vec3 cameraPos(0.0f, 0.0f, - FOCAL);
 const float delta_displacement = 0.1f;
 glm::vec3 indirectLight = 0.5f * glm::vec3(1, 1, 1);
 glm::vec3 lightPos(0, -0.5, -0.7);
-glm::vec3 lightColor = 14.f * glm::vec3(1, 1, 1);
+glm::vec3 lightColor = 8.f * glm::vec3(1, 1, 1);
 glm::vec3 lightSample[SOFT_SHADOW_SAMPLES];
 
 const float theta = D2R(5);

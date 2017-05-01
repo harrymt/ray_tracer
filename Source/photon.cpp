@@ -1,6 +1,6 @@
 #include "raytracer.h"
 
-#define NUM_PHOTONS 250000
+#define NUM_PHOTONS 25000//0
 #define SEARCH_RADIUS 0.4
 
 extern glm::vec3 lightPos;
@@ -111,5 +111,5 @@ glm::vec3 gather(vec3& pos, Triangle& triangle)
 	}
 	gather_colour /= (2.4f*n);// / (triangle.area() * triangle.area());
 	
-	return glm::clamp(gather_colour, vec3(0.f, 0.f, 0.f), vec3(1.f, 1.f, 1.f));
+	return glm::clamp(gather_colour, vec3(0.f, 0.f, 0.f), vec3(1.f, 1.f, 1.f)) * 1.5f;
 }

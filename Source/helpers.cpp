@@ -24,7 +24,7 @@ vec3 directLight(const Intersection &i, Triangle& closestTriangle, const Triangl
 
         // Check intersection from intersection to lightsource
         Intersection intersectFromThis;
-        if(closestIntersection(i.position + directionFromSurfaceToLight * 0.0001f, directionFromSurfaceToLight, triangles, num_triangles, intersectFromThis))
+        if(closestIntersection(i.position + directionFromSurfaceToLight * 0.000001f, directionFromSurfaceToLight, triangles, num_triangles, intersectFromThis))
         {
             // If in shadow, darken the colour
             if(intersectFromThis.triangleIndex != i.triangleIndex &&
