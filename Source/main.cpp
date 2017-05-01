@@ -8,7 +8,8 @@ int t;
 Triangle* triangles;
 size_t num_triangles;
 
-vec3 cameraPos(0, 0, -FOCAL);
+//vec3 cameraPos(0.28, 0.14, 1.1-FOCAL);
+vec3 cameraPos(0.0f, 0.0f, - FOCAL);
 const float delta_displacement = 0.1f;
 glm::vec3 indirectLight = 0.5f * glm::vec3(1, 1, 1);
 glm::vec3 lightPos(0, -0.5, -0.7);
@@ -121,7 +122,7 @@ void draw()
 	int percent_complete = 0;
 	std::cout << "percent complete: 0%";
 #pragma omp parallel for schedule(dynamic,2)
-	for (int y = 0/*+625*/; y < SCREEN_HEIGHT/* - 100*/; y += SSAA)
+	for (int y = 0/*+500*/; y < SCREEN_HEIGHT/* - 300*/; y += SSAA)
     {
 		for (int x = 0/*+450*/; x < SCREEN_WIDTH/* - 250*/; x += SSAA)
         {
@@ -186,9 +187,10 @@ int main()
     // Fill triangles with test model
 	load("roomwhite.obj", vec3(0.86f, 0.86f, 0.76f),    triangles_);
 	load("roomred.obj",   vec3(0.239f, 0.008f, 0.031f), triangles_);
-	load("roomgreen.obj", vec3(0.031f, 0.239f, 0.008f), triangles_);
+    load("roomgreen.obj", vec3(0.031f, 0.239f, 0.008f), triangles_);
 	load("cube.obj",      vec3(0.86f, 0.86f, 0.76f),    triangles_);
 	load("cuboid.obj",    vec3(0.86f, 0.86f, 0.76f),    triangles_);
+	load("bunny2.obj",     vec3(0.286f, 0.18f, 0.039f),  triangles_);
 	scale(triangles_, 555);
 
 	num_triangles = triangles_.size();

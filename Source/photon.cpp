@@ -1,6 +1,6 @@
 #include "raytracer.h"
 
-#define NUM_PHOTONS 2500//00
+#define NUM_PHOTONS 250000
 #define SEARCH_RADIUS 0.4
 
 extern glm::vec3 lightPos;
@@ -28,7 +28,7 @@ std::vector<photon_t> generateMap()
 		dir = glm::normalize(dir);
 		glm::vec3 pos = lightPos;
 		glm::vec3 colour = glm::vec3(1, 1, 1);
-		float lum = 5.f;// / NUM_PHOTONS;
+		float lum = 50.f;// / NUM_PHOTONS;
 		Intersection closest;
 		bool first = true;
 		while (lum > 0)
@@ -42,7 +42,10 @@ std::vector<photon_t> generateMap()
 				photon.pos = pos;
 
 				Triangle& triangle = triangles[closest.triangleIndex];
+				photon.lum = 10.0f * glm::dot(triangle.normal, dir);
+
 				dir = triangle.normal;
+				photon.normal = dir;
 				dir = glm::rotateX(dir, glm::linearRand(-0.99f, 0.99f) * 3.14159f / 2.0f);
 				dir = glm::rotateY(dir, glm::linearRand(-0.99f, 0.99f) * 3.14159f / 2.0f);
 				dir = glm::rotateZ(dir, glm::linearRand(-0.99f, 0.99f) * 3.14159f / 2.0f);
@@ -52,7 +55,6 @@ std::vector<photon_t> generateMap()
 				colour.g *= triangle.color.g;
 				colour.b *= triangle.color.b;
 				photon.colour = colour;
-				photon.lum = 1.0f;
 
 				if (!first) photons.push_back(photon);
 				first = false;
@@ -87,9 +89,13 @@ glm::vec3 gather(vec3& pos, Triangle& triangle)
 		if (dist < SEARCH_RADIUS)
 		{
 			// additional constraint, we will ensure we only act on the plane normal to our intersection
+			//float dot = glm::dot(triangle.v0 - photon.pos, triangle.normal);
+			//if (dot == 0.0f)
 
-			float dot = glm::dot(triangle.v0 - photon.pos, triangle.normal);
-			if (dot == 0.0f)
+			// That was great, but not for complex geometry like bunnies
+			// Instead we will only collect within a certain angle
+			float alpha = glm::dot(triangle.normal, photon.normal) / (glm::length(triangle.normal) * glm::length(photon.normal));
+			if (alpha > 0.25)
 			{
 				nearest.push_back(&photon);
 			}
@@ -103,7 +109,7 @@ glm::vec3 gather(vec3& pos, Triangle& triangle)
 		gather_colour += glm::clamp(photon->colour, vec3(0.f, 0.f, 0.f), vec3(1.f, 1.f, 1.f));
 		n++;
 	}
-	gather_colour /= 2.4f*n;
+	gather_colour /= (2.4f*n);// / (triangle.area() * triangle.area());
 	
 	return glm::clamp(gather_colour, vec3(0.f, 0.f, 0.f), vec3(1.f, 1.f, 1.f));
 }

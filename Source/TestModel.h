@@ -15,10 +15,11 @@ public:
     glm::vec3 v2;
     glm::vec3 normal;
     glm::vec3 color;
+	bool invert_;
 
 	inline Triangle(){}
     inline Triangle( glm::vec3 v0, glm::vec3 v1, glm::vec3 v2, glm::vec3 color )
-        : v0(v0), v1(v1), v2(v2), color(color)
+		: v0(v0), v1(v1), v2(v2), color(color), invert_(false)
     {
         ComputeNormal();
     }
@@ -28,7 +29,26 @@ public:
         glm::vec3 e1 = v1-v0;
         glm::vec3 e2 = v2-v0;
         normal = glm::normalize( glm::cross( e2, e1 ) );
+		if (invert_)
+		{
+			normal.x = -normal.x;
+			normal.y = -normal.y;
+			normal.z = -normal.z;
+		}
     }
+
+	inline void invert()
+	{
+		invert_ = true;
+		ComputeNormal();
+	}
+
+	inline float area()
+	{
+		float h = glm::length(v1 - (v0 + v2) / 2.0f);
+		float w = glm::length(v2 - v0);
+		return h * w / 2.0f;
+	}
 };
 
 // Loads the Cornell Box. It is scaled to fill the volume:

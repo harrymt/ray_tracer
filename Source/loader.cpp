@@ -1,43 +1,46 @@
 #include "raytracer.h"
 #include <fstream>
 
-void load(std::string name, glm::vec3 colour, std::vector<Triangle>& triangles)
+void load(std::string name, glm::vec3 colour, std::vector<Triangle>& triangles, bool invert)
 {
 	std::ifstream file(name);
 	char buffer[128];
 	std::vector<glm::vec3> vertices;
 	if (file.is_open())
 	{
+		int size = triangles.size();
 		std::cout << "Loading: " << name << std::endl;
 		while (!file.eof())
 		{
 			switch (file.peek())
 			{
-			case '#':
-				file.getline(buffer, 128);
-				break;
 			case 'v':
 				file.get();
 				float x, y, z;
 				file >> x >> y >> z;
-				std::cout << x << " " << y << " " << z << std::endl;
 				vertices.push_back(vec3(x, y, z));
 				break;
 			case 'f':
+			{
 				file.get();
 				int a, b, c;
 				file >> a >> b >> c;
 				--a; --b; --c;
-				std::cout << (char)(a + 'A') << " " << (char)(b + 'A') << " " << (char)(c + 'A') << std::endl;
-				triangles.push_back(Triangle(vertices[a], vertices[b], vertices[c], colour));
+				Triangle triangle(vertices[a], vertices[b], vertices[c], colour);
+				if (invert) triangle.invert();
+				triangles.push_back(triangle);
 				break;
+			}
 			case '\n':
 				file.get();
 				break;
+			case '#':
 			default:
+				file.getline(buffer, 128);
 				break;
 			}
 		}
+		std::cout << "Loaded " << triangles.size() - size << " new triangles" << std::endl;
 		file.close();
 	}
 	else

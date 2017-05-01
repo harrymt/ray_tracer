@@ -24,13 +24,12 @@ vec3 directLight(const Intersection &i, Triangle& closestTriangle, const Triangl
 
         // Check intersection from intersection to lightsource
         Intersection intersectFromThis;
-        if(closestIntersection(i.position, directionFromSurfaceToLight, triangles, num_triangles, intersectFromThis))
+        if(closestIntersection(i.position + directionFromSurfaceToLight * 0.0001f, directionFromSurfaceToLight, triangles, num_triangles, intersectFromThis))
         {
             // If in shadow, darken the colour
             if(intersectFromThis.triangleIndex != i.triangleIndex &&
                 intersectFromThis.distance <= (glm::length(directionFromSurfaceToLight) + SOFT_SHADOW_MAX_OFFSET))
             {
-                //colour -= vec3(SHADOW_STR, SHADOW_STR, SHADOW_STR);
 				colour = vec3(0.f, 0.f, 0.f);
             }
         }
