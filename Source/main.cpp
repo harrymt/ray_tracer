@@ -120,8 +120,7 @@ void draw()
 	int num_complete = 0;
 	int num_required = TRUE_SCREEN_HEIGHT * TRUE_SCREEN_WIDTH;
 	int percent_complete = 0;
-	std::cout << "percent complete: 0%";
-#pragma omp parallel for schedule(dynamic,2)
+#pragma omp parallel for schedule(static,10)
 	for (int y = 0/*+500*/; y < SCREEN_HEIGHT/* - 300*/; y += SSAA)
     {
 		for (int x = 0/*+450*/; x < SCREEN_WIDTH/* - 250*/; x += SSAA)
@@ -150,15 +149,15 @@ void draw()
 
             PutPixelSDL(screen, x / SSAA, y / SSAA, colour);
 			// Just for visual cues
-			/*num_complete++;
+			num_complete++;
 			if (num_complete > (percent_complete * num_required / 100))
 			{
 				percent_complete++;
 				if (percent_complete > 10) std::cout << "\b";
 				std::cout << "\b\b" << percent_complete << "%";
 				if (percent_complete == 100) std::cout << std::endl;
-			}*/
-			SDL_UpdateRect(screen, 0, 0, 0, 0);
+			}
+			//SDL_UpdateRect(screen, 0, 0, 0, 0);
         }
     }
 
@@ -204,7 +203,7 @@ int main()
     // Generate random light samples
     generateLightSample();
 
-	//omp_set_num_threads(6);
+	omp_set_num_threads(6);
 
 	std::vector<photon_t> photons = generateMap();
 	std::cout << photons.size() << std::endl;

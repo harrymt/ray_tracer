@@ -1,6 +1,6 @@
 #include "raytracer.h"
 
-#define NUM_PHOTONS 25000//0
+#define NUM_PHOTONS 750000//25000//0
 #define SEARCH_RADIUS 0.4
 #define SEARCH_RADIUS_SQUARED SEARCH_RADIUS * SEARCH_RADIUS
 
@@ -22,7 +22,7 @@ std::vector<photon_t> photons;
 
 std::vector<photon_t> generateMap()
 {
-	for (int n = 0; n != NUM_PHOTONS; n++)
+	for (int n = 0; n < NUM_PHOTONS; n++)
 	{
 		// Need to make a photon
 		glm::vec3 dir = glm::linearRand<float>(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
@@ -88,8 +88,9 @@ glm::vec3 gather(vec3& pos, Triangle& triangle)
 
 			// That was great, but not for complex geometry like bunnies
 			// Instead we will only collect within a certain angle
-			float alpha = glm::dot(triangle.normal , photon.normal) / (triangle.normal_length * photon.normal_length);
-			if (alpha > 0.25)
+			float alpha = glm::dot(triangle.normal, photon.normal);
+			// micro-optimisation: multiply is faster than division!
+			if (alpha > 0.25 * triangle.normal_length * photon.normal_length)
 			{
 				gather_colour += photon.colour;
 				++n;
