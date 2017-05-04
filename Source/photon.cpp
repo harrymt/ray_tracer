@@ -1,6 +1,6 @@
 #include "raytracer.h"
 
-#define NUM_PHOTONS 750000//25000//0
+#define NUM_PHOTONS 250//25000//0
 #define SEARCH_RADIUS 0.4
 #define SEARCH_RADIUS_SQUARED SEARCH_RADIUS * SEARCH_RADIUS
 
@@ -50,7 +50,7 @@ std::vector<photon_t> generateMap()
 				dir = glm::rotateY(dir, glm::linearRand(-0.99f, 0.99f) * 3.14159f / 2.0f);
 				dir = glm::rotateZ(dir, glm::linearRand(-0.99f, 0.99f) * 3.14159f / 2.0f);
 				dir = glm::normalize(dir);
-				
+
 				colour.r *= triangle.color.r;
 				colour.g *= triangle.color.g;
 				colour.b *= triangle.color.b;
@@ -67,7 +67,7 @@ std::vector<photon_t> generateMap()
 			else break;
 		}
 	}
-	
+
 	return photons;
 }
 
@@ -98,7 +98,6 @@ glm::vec3 gather(vec3& pos, Triangle& triangle)
 		}
 	}
 	gather_colour /= (2.4f*n);
-	
+
 	return glm::clamp(gather_colour, vec3(0.f, 0.f, 0.f), vec3(1.f, 1.f, 1.f)) * 1.5f;
 }
-

@@ -184,12 +184,12 @@ int main()
     t = SDL_GetTicks();
 	vector<Triangle> triangles_;
     // Fill triangles with test model
-	load("roomwhite.obj", vec3(0.86f, 0.86f, 0.76f),    triangles_);
-	load("roomred.obj",   vec3(0.239f, 0.008f, 0.031f), triangles_);
-    load("roomgreen.obj", vec3(0.031f, 0.239f, 0.008f), triangles_);
-	load("cube.obj",      vec3(0.86f, 0.86f, 0.76f),    triangles_);
-	load("cuboid.obj",    vec3(0.86f, 0.86f, 0.76f),    triangles_);
-	load("bunny2.obj",     vec3(0.286f, 0.18f, 0.039f),  triangles_);
+	load("Models/roomwhite.obj", vec3(0.86f, 0.86f, 0.76f),    triangles_);
+	load("Models/roomred.obj",   vec3(0.239f, 0.008f, 0.031f), triangles_);
+    load("Models/roomgreen.obj", vec3(0.031f, 0.239f, 0.008f), triangles_);
+	load("Models/cube.obj",      vec3(0.86f, 0.86f, 0.76f),    triangles_);
+	load("Models/cuboid.obj",    vec3(0.86f, 0.86f, 0.76f),    triangles_);
+	load("Models/bunny2.obj",     vec3(0.286f, 0.18f, 0.039f),  triangles_);
 	scale(triangles_, 555);
 
 	num_triangles = triangles_.size();
