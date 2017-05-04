@@ -1,37 +1,39 @@
 # Ray Tracer
 
-Ray Tracer for the University of Bristol Computer Graphics course (course work 1).
+Ray Tracer for the University of Bristol Computer Graphics course (course work 1), links with the [Rasteriser](https://github.com/harrymt/rasterizer/).
+
+See the [report](report.pdf) for a full overview.
 
 ## How to Build
 
-Simply use the [Makefile](Makefile) to build the program by running the following command in the directory.
+- Download a copy of [GLM](http://glm.g-truc.net) and place it inside of the root directory.
+- Then use [Makefile](Makefile) to build the program by running the following command in the directory.
 
 ```
 make
 ```
 
-A rendered image of the [Cornell Box](https://en.wikipedia.org/wiki/Cornell_box) should appear.
-Note: SDL should be installed on the machine.
+- A rendered image of the [Cornell Box](https://en.wikipedia.org/wiki/Cornell_box) should appear.
+
 
 ## Latest Rendered Image
 
 ![Screenshot](screenshot.bmp "Rendered Image")
 
-## Overview
 
-To generate an image we trace rays of light from a light source back to the camera. We need to simulate the behaviour of the light rays and how they interact with geometry in the scene.
+## Features
 
-This is an implementation of a Ray Tracer displaying a render of the [Cornell Box](https://en.wikipedia.org/wiki/Cornell_box). The program is split up into the following steps:
+Basic components of a ray tracer were implemented along with the following extensions:
 
-- Represent 3D scenes using triangular surfaces.
-- Trace the ray of each pixel in the camera image into the scene.
-- Compute ray-triangle intersections, to find out which surface a ray hit.
-
-## Possible Extensions
-
-- Add fog? By increasing the power in that big equation in the exponent
-- Download a material from the MERL database and add it to the scene?
-
+- Anti-Aliasing with SSAA
+- Soft-Shadows
+- Parallelisation - CPU
+- General Model Loading
+- Photon Mapping
+- Approximating Global Illumination (Indirect Illumination and Colour Bleeding
+- Range Trees and KD-Trees
+- Photon Mapping Optimisations
+- Improving Photon Mapping Quality
 
 ## Technologies
 
