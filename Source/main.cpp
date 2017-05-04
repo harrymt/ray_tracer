@@ -18,15 +18,22 @@ glm::vec3 lightSample[SOFT_SHADOW_SAMPLES];
 
 const float theta = D2R(5);
 
-const mat3 rota(cos(theta),  0, sin(theta),
-                0,           1, 0,
-                -sin(theta), 0, cos(theta));
+// const mat3 rota(cos(theta),  0, sin(theta),
+//                 0,           1, 0,
+//                 -sin(theta), 0, cos(theta));
+//
+// const mat3 rotc(cos(-theta),  0, sin(-theta),
+//                 0,            1, 0,
+//                 -sin(-theta), 0, cos(-theta));
 
-const mat3 rotc(cos(-theta),  0, sin(-theta),
-                0,            1, 0,
-                -sin(-theta), 0, cos(-theta));
-
+float rotationAngle = 0;
 mat3 currentRot(1, 0, 0, 0, 1, 0, 0, 0, 1);
+void updateRotation() {
+    float s = sin(rotationAngle);
+    currentRot[0][0] = currentRot[2][2] = cos(rotationAngle);
+    currentRot[0][2] = s;
+    currentRot[2][0] = -s;
+}
 
 void update()
 {
@@ -36,41 +43,58 @@ void update()
     t = t2;
     cout << "Render time: " << dt << " ms.\n";
 
+    // Need to compute these every update
+   glm::vec3 right(currentRot[0][0], currentRot[0][1], currentRot[0][2]);
+   glm::vec3 forward(currentRot[2][0], currentRot[2][1], currentRot[2][2]);
+
     Uint8* keystate = SDL_GetKeyState(0);
     if (keystate[SDLK_w])
     {
-        cameraPos = cameraPos * glm::inverse(currentRot);
-        cameraPos[2] += delta_displacement;
-        cameraPos = cameraPos * currentRot;
+        cameraPos += theta * forward;
+        updateRotation();
     }
     if (keystate[SDLK_s])
     {
-        cameraPos = cameraPos * glm::inverse(currentRot);
-        cameraPos[2] -= delta_displacement;
-        cameraPos = cameraPos * currentRot;
+        cameraPos -= theta * forward;
+        updateRotation();
     }
+    // Strafe
     if (keystate[SDLK_d])
     {
-        cameraPos = cameraPos * glm::inverse(currentRot);
-        cameraPos[0] += delta_displacement;
-        cameraPos = cameraPos * currentRot;
+        cameraPos += theta * right;
+        updateRotation();
     }
     if (keystate[SDLK_a])
     {
+        cameraPos -= theta * right;
+        updateRotation();
+    }
+
+    if (keystate[SDLK_t])
+    {
         cameraPos = cameraPos * glm::inverse(currentRot);
-        cameraPos[0] -= delta_displacement;
+        cameraPos[1] -= delta_displacement;
         cameraPos = cameraPos * currentRot;
+        updateRotation();
+    }
+    if (keystate[SDLK_y])
+    {
+        cameraPos = cameraPos * glm::inverse(currentRot);
+        cameraPos[1] += delta_displacement;
+        cameraPos = cameraPos * currentRot;
+        updateRotation();
     }
     if (keystate[SDLK_q])
     {
-        currentRot = currentRot * rota;
-        cameraPos = cameraPos * rota;
+        rotationAngle += theta;
+        updateRotation();
     }
     if (keystate[SDLK_e])
     {
-        currentRot = currentRot * rotc;
-        cameraPos = cameraPos * rotc;
+        rotationAngle -= theta;
+        updateRotation();
     }
+
     if (keystate[SDLK_r])
     {
         cameraPos = {0, 0, -FOCAL};
@@ -180,6 +204,8 @@ void generateLightSample() {
 
 int main()
 {
+    currentRot[1][1] = 1.0f;
+
     screen = InitializeSDL(TRUE_SCREEN_WIDTH, TRUE_SCREEN_HEIGHT);
     t = SDL_GetTicks();
 	vector<Triangle> triangles_;
@@ -189,7 +215,7 @@ int main()
     load("Models/roomgreen.obj", vec3(0.031f, 0.239f, 0.008f), triangles_);
 	load("Models/cube.obj",      vec3(0.86f, 0.86f, 0.76f),    triangles_);
 	load("Models/cuboid.obj",    vec3(0.86f, 0.86f, 0.76f),    triangles_);
-	load("Models/bunny2.obj",     vec3(0.286f, 0.18f, 0.039f),  triangles_);
+	load("Models/bunny2.obj",    vec3(0.286f, 0.18f, 0.039f),  triangles_);
 	scale(triangles_, 555);
 
 	num_triangles = triangles_.size();
@@ -208,7 +234,7 @@ int main()
 	std::vector<photon_t> photons = generateMap();
 	std::cout << photons.size() << std::endl;
 
-    //do
+    do
     {
 		SDL_FillRect(screen, 0, 0);
         update();

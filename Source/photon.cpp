@@ -1,6 +1,6 @@
 #include "raytracer.h"
 
-#define NUM_PHOTONS 250//25000//0
+#define NUM_PHOTONS 750000//25000//0
 #define SEARCH_RADIUS 0.4
 #define SEARCH_RADIUS_SQUARED SEARCH_RADIUS * SEARCH_RADIUS
 
